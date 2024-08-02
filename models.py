@@ -37,6 +37,7 @@ class User(db.Model, SerializerMixin):
     payments = db.relationship('Payment', back_populates='user')
     subscriptions = db.relationship('Subscription', back_populates='user')
     lawyer_details = db.relationship('LawyerDetails', back_populates='user')
+    reviews = db.relationship('Review', back_populates='user')
 
 
 class Role(db.Model, SerializerMixin):
@@ -126,6 +127,9 @@ class Review(db.Model, SerializerMixin):
     user_id = db.Column(db.Integer)
     lawyer_id = db.Column(db.Integer)
     review = db.Column(db.String)
+
+    # Relationship
+    user = db.relationship('User', back_populates='reviews')
 
 
 class Message(db.Model, SerializerMixin):
