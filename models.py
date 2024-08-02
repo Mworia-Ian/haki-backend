@@ -32,6 +32,9 @@ class User(db.Model, SerializerMixin):
     password = db.Column(db.Text, nullable=False)
     area_of_residence = db.Column(db.Text, nullable=False)
 
+    # Linking up relationships
+    roles = db.relationship('Role', back_populates='user')
+
 
 class Role(db.Model, SerializerMixin):
 
@@ -43,6 +46,9 @@ class Role(db.Model, SerializerMixin):
     firstname = db.Column(db.Text, nullable=False)
     lastname = db.Column(db.Text, nullable=False)
     email = db.Column(db.String, nullable=False)
+    
+    #Relationship
+    user =db.relationship('User',back_populates='roles')
 
 
 class LawyerDetails(db.Model, SerializerMixin):
