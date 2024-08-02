@@ -6,6 +6,13 @@ with app.app_context():
     print('Seeding dummy data')
     User.query.delete()
     LawyerDetails.query.delete()
+    Review.query.delete()
+    Payment.query.delete()
+    Subscription.query.delete()
+    Case.query.delete()
+    Message.query.delete()
+    Role.query.delete()
+    CaseHistory.query.delete()
 
     # Users data
     user1 = User(firstname='Charles', lastname='Biegon', id_no=12345678, phone='0712345678',
@@ -65,7 +72,7 @@ with app.app_context():
     print('Case history')
 
     # message data
-    message1 = Message(user_id=user1.id,date=datetime.now(), message='Message details',
+    message1 = Message(user_id=user1.id, date=datetime.now(), message='Message details',
                        sender_id='Charles Biegon', receiver_id='Jane Doe')
     db.session.add(message1)
     db.session.commit()
