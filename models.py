@@ -31,3 +31,15 @@ class User(db.Model, SerializerMixin):
     email = db.Column(db.String, nullable=False)
     password = db.Column(db.Text, nullable=False)
     area_of_residence = db.Column(db.Text, nullable=False)
+
+
+class Role(db.Model, SerializerMixin):
+
+    # Table to keep track of our users roles
+    __tablename__ = 'roles'
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer)
+    firstname = db.Column(db.Text, nullable=False)
+    lastname = db.Column(db.Text, nullable=False)
+    email = db.Column(db.String, nullable=False)
