@@ -2,6 +2,7 @@
 from flask_sqlachemy import SQLAlchemy
 from sqlalchemy import MetaData
 from sqlalchemy_serializer import SerializerMixin
+from datetime import datetime
 
 convention = {
     "ix": 'ix_%(column_0_label)s',
@@ -48,7 +49,7 @@ class Role(db.Model, SerializerMixin):
     __tablename__ = 'roles'
 
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     firstname = db.Column(db.Text, nullable=False)
     lastname = db.Column(db.Text, nullable=False)
     email = db.Column(db.String, nullable=False)
@@ -63,7 +64,7 @@ class LawyerDetails(db.Model, SerializerMixin):
     __tablename__ = 'lawyers'
 
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     lawyer_id = db.Column(db.Text)
     years_of_experience = db.Column(db.Text, nullable=False)
     specialization = db.Column(db.Text, nullable=False)
@@ -82,7 +83,7 @@ class Payment(db.Model, SerializerMixin):
     __tablename__ = 'payments'
 
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
     # Relationship
     user = db.relationship('User', back_populates='payments')
@@ -95,7 +96,7 @@ class Subscription(db.Model, SerializerMixin):
     __tablename__ = 'subscriptions'
 
     id = db.Column(db.Integer, primary_key=True)
-    payment_id = db.Column(db.Integer)
+    payment_id = db.Column(db.Integer, db.ForeignKey('payments.id'))
     user_id = db.Column(db.Integer)
 
     # Relationship
@@ -109,7 +110,7 @@ class Case(db.Model, SerializerMixin):
     __tablename__ = 'cases'
 
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     lawyer_id = db.Column(db.Integer)
     description = db.Column(db.String)
     court_date = db.Column(db.TIMESTAMP)
@@ -127,7 +128,7 @@ class CaseHistory(db.Model, SerializerMixin):
     __tablename__ = 'histories'
 
     id = db.Column(db.Integer, primary_key=True)
-    case_id = db.Column(db.Integer)
+    case_id = db.Column(db.Integer, db.ForeignKey('cases.id'))
     details = db.Column(db.String)
 
     # Relationship
@@ -138,7 +139,7 @@ class Review(db.Model, SerializerMixin):
 
     # Table to store the reviews
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     lawyer_id = db.Column(db.Integer)
     review = db.Column(db.String)
 
@@ -153,7 +154,7 @@ class Message(db.Model, SerializerMixin):
     __tablename__ = 'messages'
 
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     message = db.Column(db.String)
     date = db.Column(db.TIMESTAMP, default=datetime.utcnow)
     sender_id = db.Column(db.Text)
