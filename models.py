@@ -36,6 +36,7 @@ class User(db.Model, SerializerMixin):
     roles = db.relationship('Role', back_populates='user')
     payments = db.relationship('Payment', back_populates='user')
     subscriptions = db.relationship('Subscription', back_populates='user')
+    lawyer_details = db.relationship('LawyerDetails', back_populates='user')
 
 
 class Role(db.Model, SerializerMixin):
@@ -65,6 +66,9 @@ class LawyerDetails(db.Model, SerializerMixin):
     specialization = db.Column(db.Text, nullable=False)
     rate_per_hour = db.Column(db.Integer)
     qualification_certificate = db.Column(db.LargeBinary, nullable=False)
+
+    # Relationships
+    user = db.relationship('User', back_populates='lawyer_details')
 
 
 class Payment(db.Model, SerializerMixin):
