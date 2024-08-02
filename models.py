@@ -145,7 +145,7 @@ class Review(db.Model, SerializerMixin):
 
     # Relationship
     user = db.relationship('User', back_populates='reviews')
-    lawyer = db.relationship('LawyerDetail', back_populates='reviews')
+    lawyer = db.relationship('LawyerDetails', back_populates='reviews')
 
 
 class Message(db.Model, SerializerMixin):
