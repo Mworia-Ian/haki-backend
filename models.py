@@ -88,3 +88,13 @@ class Case(db.Model,SerializerMixin):
       description =db.Column(db.String)
       court_date= db.Column(db.TIMESTAMP)
       status = db.Column(db.Text)
+      
+class CaseHistorY(db.Model,SerializerMixin):
+      
+      #Table to keep track of the our users cases
+      __tablename__ = 'histories'
+      
+      id = db.Column(db.Integer,primary_key=True)
+      case_id = db.Column(db.Integer)
+      details = db.Column(db.String)
+      
