@@ -5,7 +5,7 @@ from flask_cors import CORS
 from flask_restful import Api
 
 
-from models import db
+from models import db,User
 
 app = Flask(__name__)
 api = Api(app)
@@ -24,3 +24,9 @@ db.init_app(app)
 @app.route('/')
 def home():
     return 'Hello from flask'
+  
+@app.route('/users',methods=['GET'])
+def users():
+     user = User.query.all()
+     print(user)
+     return []
