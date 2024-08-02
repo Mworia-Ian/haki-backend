@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import MetaData
 from sqlalchemy_serializer import SerializerMixin
 from datetime import datetime
+from flask_bcrypt import check_password_hash
 
 convention = {
     "ix": 'ix_%(column_0_label)s',
@@ -31,7 +32,15 @@ class User(db.Model, SerializerMixin):
     phone = db.Column(db.Text, nullable=False)
     email = db.Column(db.String, nullable=False)
     password = db.Column(db.Text, nullable=False)
-    area_of_residence = db.Column(db.Text, nullable=False)
+    area_of_residence = db.Column(db.Text)
+    role = db.Column(db.Text)
+    
+    
+    serialize_rules = ('-password',)
+
+    def check_password(self, plain_password):
+        return check_password_hash(self.password, plain_password)
+    
 
     # Linking up relationships
     roles = db.relationship('Role', back_populates='user')
@@ -162,3 +171,4 @@ class Message(db.Model, SerializerMixin):
 
     # Relationship
     user = db.relationship('User', back_populates='messages')
+
