@@ -57,3 +57,13 @@ class LawyerDetails(db.Model, SerializerMixin):
     specialization = db.Column(db.Text, nullable=False)
     rate_per_hour = db.Column(db.Integer)
     qualification_certificate = db.Column(db.LargeBinary, nullable=False)
+    
+
+class Payment(db.Model,SerializerMixin):
+      
+      #Table to store payment of the users
+      __tablename__= 'payments'
+      
+      id =db.Column(db.Integer,primary_key=True)
+      user_id = db.Column(db.Integer)
+      
