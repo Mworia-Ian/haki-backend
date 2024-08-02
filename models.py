@@ -64,7 +64,7 @@ class Role(db.Model, SerializerMixin):
     email = db.Column(db.String, nullable=False)
 
     # Relationship
-    user = db.relationship('User', back_populates='roles')
+    user = db.relationship('User', back_populates='roles') 
 
 
 class LawyerDetails(db.Model, SerializerMixin):
