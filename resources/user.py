@@ -80,3 +80,8 @@ class LoginResource(Resource):
         
         
         
+class LogoutResource(Resource):
+    @jwt_required()
+    def post(self):
+        # JWT handles logout by removing the token from the client-side.
+        return {"message": "Logged out successfully"}, 200
