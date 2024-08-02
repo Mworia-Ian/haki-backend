@@ -85,6 +85,7 @@ class Payment(db.Model, SerializerMixin):
 
     # Relationship
     user = db.relationship('User', back_populates='payments')
+    subscriptions = db.relationship('Subscription', back_populates='payment')
 
 
 class Subscription(db.Model, SerializerMixin):
@@ -98,6 +99,7 @@ class Subscription(db.Model, SerializerMixin):
 
     # Relationship
     user = db.relationship('User', back_populates='subscriptions')
+    payment = db.relationship('Payment', back_populates='subscriptions')
 
 
 class Case(db.Model, SerializerMixin):
