@@ -72,6 +72,7 @@ class LawyerDetails(db.Model, SerializerMixin):
     # Relationships
     user = db.relationship('User', back_populates='lawyer_details')
     cases = db.relationship('Case', back_populates='lawyer')
+    reviews = db.relationship('Review', back_populates='lawyer')
 
 
 class Payment(db.Model, SerializerMixin):
@@ -110,9 +111,9 @@ class Case(db.Model, SerializerMixin):
     description = db.Column(db.String)
     court_date = db.Column(db.TIMESTAMP)
     status = db.Column(db.Text)
-    
-    #Relationship
-    lawyer = db.relationship('LawyerDetails',back_populates='cases')
+
+    # Relationship
+    lawyer = db.relationship('LawyerDetails', back_populates='cases')
 
 
 class CaseHistorY(db.Model, SerializerMixin):
@@ -135,6 +136,7 @@ class Review(db.Model, SerializerMixin):
 
     # Relationship
     user = db.relationship('User', back_populates='reviews')
+    lawyer = db.relationship('LawyerDetail', back_populates='reviews')
 
 
 class Message(db.Model, SerializerMixin):
