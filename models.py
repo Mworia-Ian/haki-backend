@@ -76,3 +76,15 @@ class Subscription(db.Model,SerializerMixin):
       id = db.Column(db.Integer,primary_key=True)
       payment_id = db.Column(db.Integer)
       user_id =db.Column(db.Integer)
+      
+class Case(db.Model,SerializerMixin):
+      
+      #Table to store the cases of our users
+      __tablename__ = 'cases'
+      
+      id = db.Column(db.Integer,primary_key=True)
+      user_id =db.Column(db.Integer)
+      lawyer_id = db.Column(db.Integer)
+      description =db.Column(db.String)
+      court_date= db.Column(db.TIMESTAMP)
+      status = db.Column(db.Text)
