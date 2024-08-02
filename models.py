@@ -43,3 +43,17 @@ class Role(db.Model, SerializerMixin):
     firstname = db.Column(db.Text, nullable=False)
     lastname = db.Column(db.Text, nullable=False)
     email = db.Column(db.String, nullable=False)
+
+
+class LawyerDetails(db.Model, SerializerMixin):
+
+    # Table to hold lawyers details
+    __tablename__ = 'lawyers'
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer)
+    lawyer_id = db.Column(db.Text)
+    years_of_experience = db.Column(db.Text, nullable=False)
+    specialization = db.Column(db.Text, nullable=False)
+    rate_per_hour = db.Column(db.Integer)
+    qualification_certificate = db.Column(db.LargeBinary, nullable=False)
