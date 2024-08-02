@@ -38,6 +38,7 @@ class User(db.Model, SerializerMixin):
     subscriptions = db.relationship('Subscription', back_populates='user')
     lawyer_details = db.relationship('LawyerDetails', back_populates='user')
     reviews = db.relationship('Review', back_populates='user')
+    messages = db.relationship('Message', back_populates='user')
 
 
 class Role(db.Model, SerializerMixin):
@@ -143,3 +144,6 @@ class Message(db.Model, SerializerMixin):
     date = db.Column(db.TIMESTAMP, default=datetime.utcnow)
     sender_id = db.Column(db.Text)
     receiver_id = db.Column(db.Text)
+
+    # Relationship
+    user = db.relationship('User', back_populates='messages')
