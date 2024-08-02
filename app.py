@@ -3,15 +3,13 @@ from flask import Flask
 from flask_migrate import Migrate
 from flask_cors import CORS
 from flask_restful import Api
-
-
 from models import db,User
 
 app = Flask(__name__)
 api = Api(app)
 
 
-app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres:123456@localhost/haki"
+app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres.ubtabihyrjnwkxhztihb:123!hakiapp@aws-0-ap-south-1.pooler.supabase.com:6543/postgres"
 
 app.config['SQLALCHEMY_ECHO'] = True
 
