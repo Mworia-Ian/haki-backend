@@ -67,3 +67,12 @@ class Payment(db.Model,SerializerMixin):
       id =db.Column(db.Integer,primary_key=True)
       user_id = db.Column(db.Integer)
       
+
+class Subscription(db.Model,SerializerMixin):
+      
+      #Table to keep track of whether the users have payed
+      __tablename__ = 'subscriptions'
+      
+      id = db.Column(db.Integer,primary_key=True)
+      payment_id = db.Column(db.Integer)
+      user_id =db.Column(db.Integer)
