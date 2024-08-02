@@ -118,9 +118,10 @@ class Case(db.Model, SerializerMixin):
     # Relationship
     user = db.relationship('User', back_populates='cases')
     lawyer = db.relationship('LawyerDetails', back_populates='cases')
+    case_histories = db.relationship('CaseHistory', back_populates='case')
 
 
-class CaseHistorY(db.Model, SerializerMixin):
+class CaseHistory(db.Model, SerializerMixin):
 
     # Table to keep track of the our users cases
     __tablename__ = 'histories'
@@ -128,6 +129,9 @@ class CaseHistorY(db.Model, SerializerMixin):
     id = db.Column(db.Integer, primary_key=True)
     case_id = db.Column(db.Integer)
     details = db.Column(db.String)
+
+    # Relationship
+    case = db.relationship('Case', back_populates='case_histories')
 
 
 class Review(db.Model, SerializerMixin):
