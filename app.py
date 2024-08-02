@@ -12,6 +12,7 @@ api = Api(app)
 
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///haki.db'
+# "postgresql://postgres:123456@localhost/bookmate"
 app.config['SQLALCHEMY_ECHO'] = True
 
 CORS(app)
