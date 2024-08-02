@@ -69,7 +69,7 @@ class LawyerDetails(db.Model, SerializerMixin):
     years_of_experience = db.Column(db.Text, nullable=False)
     specialization = db.Column(db.Text, nullable=False)
     rate_per_hour = db.Column(db.Integer)
-    qualification_certificate = db.Column(db.LargeBinary, nullable=False)
+    qualification_certificate = db.Column(db.LargeBinary)
 
     # Relationships
     user = db.relationship('User', back_populates='lawyer_details')
