@@ -1,5 +1,5 @@
 # Modeling  the database
-from flask_sqlachemy import SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import MetaData
 from sqlalchemy_serializer import SerializerMixin
 from datetime import datetime
@@ -97,7 +97,7 @@ class Subscription(db.Model, SerializerMixin):
 
     id = db.Column(db.Integer, primary_key=True)
     payment_id = db.Column(db.Integer, db.ForeignKey('payments.id'))
-    user_id = db.Column(db.Integer)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
     # Relationship
     user = db.relationship('User', back_populates='subscriptions')
@@ -111,7 +111,7 @@ class Case(db.Model, SerializerMixin):
 
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    lawyer_id = db.Column(db.Integer)
+    lawyer_id = db.Column(db.Integer,db.ForeignKey('lawyers.id'))
     description = db.Column(db.String)
     court_date = db.Column(db.TIMESTAMP)
     status = db.Column(db.Text)
