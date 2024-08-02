@@ -57,44 +57,54 @@ class LawyerDetails(db.Model, SerializerMixin):
     specialization = db.Column(db.Text, nullable=False)
     rate_per_hour = db.Column(db.Integer)
     qualification_certificate = db.Column(db.LargeBinary, nullable=False)
-    
 
-class Payment(db.Model,SerializerMixin):
-      
-      #Table to store payment of the users
-      __tablename__= 'payments'
-      
-      id =db.Column(db.Integer,primary_key=True)
-      user_id = db.Column(db.Integer)
-      
 
-class Subscription(db.Model,SerializerMixin):
-      
-      #Table to keep track of whether the users have payed
-      __tablename__ = 'subscriptions'
-      
-      id = db.Column(db.Integer,primary_key=True)
-      payment_id = db.Column(db.Integer)
-      user_id =db.Column(db.Integer)
-      
-class Case(db.Model,SerializerMixin):
-      
-      #Table to store the cases of our users
-      __tablename__ = 'cases'
-      
-      id = db.Column(db.Integer,primary_key=True)
-      user_id =db.Column(db.Integer)
-      lawyer_id = db.Column(db.Integer)
-      description =db.Column(db.String)
-      court_date= db.Column(db.TIMESTAMP)
-      status = db.Column(db.Text)
-      
-class CaseHistorY(db.Model,SerializerMixin):
-      
-      #Table to keep track of the our users cases
-      __tablename__ = 'histories'
-      
-      id = db.Column(db.Integer,primary_key=True)
-      case_id = db.Column(db.Integer)
-      details = db.Column(db.String)
-      
+class Payment(db.Model, SerializerMixin):
+
+    # Table to store payment of the users
+    __tablename__ = 'payments'
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer)
+
+
+class Subscription(db.Model, SerializerMixin):
+
+    # Table to keep track of whether the users have payed
+    __tablename__ = 'subscriptions'
+
+    id = db.Column(db.Integer, primary_key=True)
+    payment_id = db.Column(db.Integer)
+    user_id = db.Column(db.Integer)
+
+
+class Case(db.Model, SerializerMixin):
+
+    # Table to store the cases of our users
+    __tablename__ = 'cases'
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer)
+    lawyer_id = db.Column(db.Integer)
+    description = db.Column(db.String)
+    court_date = db.Column(db.TIMESTAMP)
+    status = db.Column(db.Text)
+
+
+class CaseHistorY(db.Model, SerializerMixin):
+
+    # Table to keep track of the our users cases
+    __tablename__ = 'histories'
+
+    id = db.Column(db.Integer, primary_key=True)
+    case_id = db.Column(db.Integer)
+    details = db.Column(db.String)
+
+
+class Review(db.Model, SerializerMixin):
+
+    # Table to store the reviews
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer)
+    lawyer_id = db.Column(db.Integer)
+    review = db.Column(db.String)
