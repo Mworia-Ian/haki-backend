@@ -34,6 +34,7 @@ class User(db.Model, SerializerMixin):
 
     # Linking up relationships
     roles = db.relationship('Role', back_populates='user')
+    payments = db.relationship('Payment', back_populates='user')
 
 
 class Role(db.Model, SerializerMixin):
@@ -46,9 +47,9 @@ class Role(db.Model, SerializerMixin):
     firstname = db.Column(db.Text, nullable=False)
     lastname = db.Column(db.Text, nullable=False)
     email = db.Column(db.String, nullable=False)
-    
-    #Relationship
-    user =db.relationship('User',back_populates='roles')
+
+    # Relationship
+    user = db.relationship('User', back_populates='roles')
 
 
 class LawyerDetails(db.Model, SerializerMixin):
@@ -72,6 +73,9 @@ class Payment(db.Model, SerializerMixin):
 
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer)
+    
+    #Relationship
+    user = db.relationship('User',back_populates='payments')
 
 
 class Subscription(db.Model, SerializerMixin):
