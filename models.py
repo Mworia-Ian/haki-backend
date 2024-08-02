@@ -108,3 +108,16 @@ class Review(db.Model, SerializerMixin):
     user_id = db.Column(db.Integer)
     lawyer_id = db.Column(db.Integer)
     review = db.Column(db.String)
+
+
+class Message(db.Model, SerializerMixin):
+
+    # Table to store the messages
+    __tablename__ = 'messages'
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer)
+    message = db.Column(db.String)
+    date = db.Column(db.TIMESTAMP, default=datetime.utcnow)
+    sender_id = db.Column(db.Text)
+    receiver_id = db.Column(db.Text)
