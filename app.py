@@ -60,7 +60,6 @@ def lawyer_details():
     user_id = request.args.get('user_id')
     data = request.form
 
-    lawyer_id = data.get('lawyer_id')
     years_of_experience = data.get('years_of_experience')
     specialization = data.get('specialization')
     rate_per_hour = data.get('rate_per_hour')
@@ -69,7 +68,6 @@ def lawyer_details():
 
     new_lawyer_detail = LawyerDetails(
         user_id=user_id,
-        lawyer_id=lawyer_id,
         years_of_experience=years_of_experience,
         specialization=specialization,
         rate_per_hour=rate_per_hour,

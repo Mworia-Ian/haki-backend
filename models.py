@@ -18,6 +18,8 @@ metadata = MetaData(naming_convention=convention)
 db = SQLAlchemy(metadata=metadata)
 
 # Models
+
+
 class User(db.Model, SerializerMixin):
 
     __tablename__ = 'users'
@@ -26,7 +28,7 @@ class User(db.Model, SerializerMixin):
     firstname = db.Column(db.String(50), nullable=False)
     lastname = db.Column(db.String(50), nullable=False)
     id_no = db.Column(db.Integer, nullable=False, unique=True)
-    phone = db.Column(db.String(15), nullable=False)
+    phone = db.Column(db.String(15), nullable=False, unique=True)
     email = db.Column(db.String(120), nullable=False, unique=True)
     password = db.Column(db.String(128), nullable=False)
     area_of_residence = db.Column(db.String(100), nullable=False)
@@ -43,7 +45,8 @@ class User(db.Model, SerializerMixin):
     @validates('phone')
     def validate_phone(self, key, phone):
         if not re.match(r"^0[0-9]{9}$", phone):
-            raise ValueError("Phone number must be a 10-digit number starting with 0")
+            raise ValueError(
+                "Phone number must be a 10-digit number starting with 0")
         return phone
 
     @validates('password')
@@ -64,7 +67,8 @@ class User(db.Model, SerializerMixin):
     # Relationships
     payments = db.relationship('Payment', back_populates='user')
     subscriptions = db.relationship('Subscription', back_populates='user')
-    lawyer_details = db.relationship('LawyerDetails', back_populates='user', uselist=False)
+    lawyer_details = db.relationship(
+        'LawyerDetails', back_populates='user', uselist=False)
     reviews = db.relationship('Review', back_populates='user')
     messages = db.relationship('Message', back_populates='user')
     cases = db.relationship('Case', back_populates='user')
