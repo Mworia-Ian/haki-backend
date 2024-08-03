@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subscribe</title>
+    <style>
+        .error { color: red; }
+    </style>
+</head>
+<body>
+    <h1>Subscribe</h1>
+    <form id="subscribeForm" action="/subscribe" method="post">
+        <input type="hidden" name="user_id" value="{{ user_id }}">
+
+        <label for="phone_number">Phone Number:</label>
+        <input type="text" id="phone_number" name="phone_number" required>
+        <span id="phoneError" class="error"></span>
+        
+        <br><br>
+        
+        <label for="amount">Amount:</label>
+        <input type="number" id="amount" name="amount" min="1" required>
+        <span id="amountError" class="error"></span>
+        
+        <br><br>
+        
+        <button type="submit">Subscribe</button>
+    </form>
+
+    <script>
+        document.getElementById('subscribeForm').addEventListener('submit', function(event) {
+            // Clear previous error messages
+            document.getElementById('phoneError').textContent = '';
+            document.getElementById('amountError').textContent = '';
+            
+            var phoneNumber = document.getElementById('phone_number').value.trim();
+            var amount = document.getElementById('amount').value;
+            var isValid = true;
+
+            // Debug output
+            console.log("Phone Number:", phoneNumber);
+            console.log("Amount:", amount);
+
+            // Validate phone number
+            var phonePattern = /^0[0-9]{9}$/;  // 10-digit phone number starting with 0
+            if (!phonePattern.test(phoneNumber)) {
+                document.getElementById('phoneError').textContent = 'Invalid phone number format. It should be a 10-digit number starting with 0.';
+                isValid = false;
+            }
+
+            // Validate amount
+            if (amount <= 0) {
+                document.getElementById('amountError').textContent = 'Amount must be greater than zero.';
+                isValid = false;
+            }
+
+            if (!isValid) {
+                // Prevent form submission if validation fails
+                event.preventDefault();
+            }
+        });
+    </script>
+</body>
+</html>

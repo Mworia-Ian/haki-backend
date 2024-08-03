@@ -6,6 +6,25 @@
 </head>
 <body>
     <h1>Available Lawyers</h1>
-    <!-- You can add the logic to display the list of available lawyers here -->
+    <table>
+        <thead>
+            <tr>
+                <th>Lawyer ID</th>
+                <th>Years of Experience</th>
+                <th>Specialization</th>
+                <th>Rate per Hour</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for lawyer in lawyers %}
+            <tr>
+                <td>{{ lawyer.lawyer_id }}</td>
+                <td>{{ lawyer.years_of_experience }}</td>
+                <td>{{ lawyer.specialization }}</td>
+                <td>{{ lawyer.rate_per_hour }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </body>
 </html>

@@ -1,5 +1,5 @@
 # Views
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify, render_template,redirect,url_for
 from flask_migrate import Migrate
 from flask_cors import CORS
 from flask_restful import Api
@@ -79,3 +79,7 @@ def lawyer_details():
     db.session.commit()
 
     return jsonify({"message": "Lawyer details submitted successfully"}), 201
+
+@app.route('/available-lawyer',methods=['GET'])
+def available_lawyers():
+    user_id = request.args.get('user')
