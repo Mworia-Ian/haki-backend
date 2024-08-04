@@ -2,7 +2,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import MetaData
 from sqlalchemy.orm import validates
 from sqlalchemy_serializer import SerializerMixin
-from flask_bcrypt import check_password_hash, generate_password_hash
+from flask_bcrypt import check_password_hash
 from datetime import datetime
 import re
 
@@ -49,11 +49,11 @@ class User(db.Model, SerializerMixin):
                 "Phone number must be a 10-digit number starting with 0")
         return phone
 
-    @validates('password')
-    def validate_password(self, key, password):
-        if len(password) < 8:
-            raise ValueError("Password must be at least 8 characters long")
-        return generate_password_hash(password).decode('utf8')
+    # @validates('password')
+    # def validate_password(self, key, password):
+    #     if len(password) < 8:
+    #         raise ValueError("Password must be at least 8 characters long")
+    #     return generate_password_hash(password).decode('utf8')
 
     @validates('role')
     def validate_role(self, key, role):
