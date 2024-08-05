@@ -1,9 +1,10 @@
 import os
+from datetime import timedelta
 from flask import Flask, request, jsonify, session
 from flask_bcrypt import Bcrypt, check_password_hash
 from flask_cors import CORS
 from flask_migrate import Migrate
-from flask_restful import Api
+from flask_restful import Api, Resource
 from sqlalchemy.exc import IntegrityError
 import re
 
@@ -14,10 +15,11 @@ app = Flask(__name__)
 api = Api(app)
 
 # Configure the app
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///haki.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres.ubtabihyrjnwkxhztihb:123!hakiapp@aws-0-ap-south-1.pooler.supabase.com:6543/postgres"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
-# app.config['SECRET_KEY'] = os.urandom(24)  
+app.config['JWT_SECRET_KEY'] = "haki_secret_key"
+app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=24)
 
 # Initialize extensions
 CORS(app)
@@ -165,6 +167,15 @@ def review_lawyer():
         return jsonify({"message": "Review added successfully"}), 201
     except Exception as e:
         return jsonify({"error": str(e)}), 400
+
+class HelloWorld(Resource):
+    def get(self):
+        return {"message": "Hello Haki"}
+
+api.add_resource(HelloWorld, '/')
+api.add_resource(SignupResource, '/signup')
+api.add_resource(LoginResource, '/login')
+api.add_resource(LogoutResource, '/logout')
 
 if __name__ == '__main__':
     app.run(debug=True)
