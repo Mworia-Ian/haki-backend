@@ -17,10 +17,10 @@ api = Api(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///haki.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
-app.config['SECRET_KEY'] = os.urandom(24)  # Set a strong secret key
+# app.config['SECRET_KEY'] = os.urandom(24)  
 
 # Initialize extensions
-CORS(app, resources={r"*": {"origins": "http://localhost:5173"}})
+CORS(app)
 db.init_app(app)
 migrate = Migrate(app, db, render_as_batch=True)
 bcrypt = Bcrypt(app)
