@@ -12,6 +12,7 @@ from flask_jwt_extended import JWTManager
 
 from models import db,User
 from resources.user import SignupResource, LoginResource, LogoutResource
+from resources.case import CaseResource
 
 app = Flask(__name__)
 api = Api(app)
@@ -54,6 +55,7 @@ api.add_resource(HelloWorld, '/')
 api.add_resource(SignupResource, '/signup')
 api.add_resource(LoginResource, '/login')
 api.add_resource(LogoutResource, '/logout')
+api.add_resource(CaseResource, '/cases', '/cases/<int:id>')
 
 if __name__ == '__main__':
     app.run(debug=True)
