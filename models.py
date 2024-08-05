@@ -21,6 +21,7 @@ db = SQLAlchemy(metadata=metadata)
 # Models
 
 class User(db.Model, SerializerMixin):
+
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -56,15 +57,21 @@ class User(db.Model, SerializerMixin):
     def check_password(self, plain_password):
         return check_password_hash(self.password, plain_password)
 
-    def set_password(self, plain_password):
-        self.password = generate_password_hash(plain_password).decode('utf8')
-
     # Relationships
     payments = db.relationship('Payment', back_populates='user')
     subscriptions = db.relationship('Subscription', back_populates='user')
     lawyer_details = db.relationship('LawyerDetails', back_populates='user', uselist=False)
     reviews = db.relationship('Review', back_populates='user')
-    messages = db.relationship('Message', back_populates='user')
+    messages_sent = db.relationship(
+        'Message',
+        foreign_keys='Message.sender_id',
+        back_populates='sender'
+    )
+    messages_received = db.relationship(
+        'Message',
+        foreign_keys='Message.receiver_id',
+        back_populates='receiver'
+    )
     cases = db.relationship('Case', back_populates='user')
 
 
@@ -156,16 +163,17 @@ class Review(db.Model, SerializerMixin):
 
 
 class Message(db.Model, SerializerMixin):
+
     __tablename__ = 'messages'
 
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     message = db.Column(db.String(1000), nullable=False)
     date = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
-    sender_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    receiver_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    sender_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    receiver_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
     # Relationships
-    user = db.relationship('User', back_populates='messages')
-    sender = db.relationship('User', foreign_keys=[sender_id])
-    receiver = db.relationship('User', foreign_keys=[receiver_id])
+    sender = db.relationship('User', foreign_keys=[sender_id], back_populates='messages_sent')
+    receiver = db.relationship('User', foreign_keys=[receiver_id], back_populates='messages_received')
+
