@@ -2,4 +2,4 @@ __pycache__/
 instance/
 migrations/
 
-pipfile.lock/
+pipfile.lock
