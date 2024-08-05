@@ -75,8 +75,6 @@ def login():
     password = data.get('password')
     user = User.query.filter_by(email=email).first()
     if user and check_password_hash(user.password, password):
-        session['user_id'] = user.id
-        session['role'] = user.role
         return jsonify({'message': 'Login successful', 'role': user.role}), 200
     else:
         return jsonify({'message': 'Invalid credentials'}), 401
