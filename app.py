@@ -46,7 +46,7 @@ api.add_resource(HelloWorld, '/')
 api.add_resource(SignupResource, '/signup')
 api.add_resource(LoginResource, '/login')
 api.add_resource(LogoutResource, '/logout')
-api.add_resource(CaseResource, '/cases', '/cases/<int:id>')
+# api.add_resource(CaseResource, '/cases', '/cases/<int:id>')
 
 if __name__ == '__main__':
     app.run(debug=True)
