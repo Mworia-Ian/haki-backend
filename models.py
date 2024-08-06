@@ -17,7 +17,11 @@ convention = {
 metadata = MetaData(naming_convention=convention)
 db = SQLAlchemy(metadata=metadata)
 
+# Models
+
+
 class User(db.Model, SerializerMixin):
+
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -41,8 +45,15 @@ class User(db.Model, SerializerMixin):
     @validates('phone')
     def validate_phone(self, key, phone):
         if not re.match(r"^0[0-9]{9}$", phone):
-            raise ValueError("Phone number must be a 10-digit number starting with 0")
+            raise ValueError(
+                "Phone number must be a 10-digit number starting with 0")
         return phone
+
+    # @validates('password')
+    # def validate_password(self, key, password):
+    #     if len(password) < 8:
+    #         raise ValueError("Password must be at least 8 characters long")
+    #     return generate_password_hash(password).decode('utf8')
 
     @validates('role')
     def validate_role(self, key, role):
@@ -56,24 +67,15 @@ class User(db.Model, SerializerMixin):
     # Relationships
     payments = db.relationship('Payment', back_populates='user')
     subscriptions = db.relationship('Subscription', back_populates='user')
-    lawyer_details = db.relationship('LawyerDetails', back_populates='user', uselist=False)
+    lawyer_details = db.relationship(
+        'LawyerDetails', back_populates='user', uselist=False)
     reviews = db.relationship('Review', back_populates='user')
     messages = db.relationship('Message', back_populates='user')
     cases = db.relationship('Case', back_populates='user')
 
-class Role(db.Model, SerializerMixin):
-    __tablename__ = 'roles'
-
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    firstname = db.Column(db.String, nullable=False)
-    lastname = db.Column(db.String, nullable=False)
-    email = db.Column(db.String, nullable=False)
-
-    # Relationship
-    user = db.relationship('User', back_populates='roles')
 
 class LawyerDetails(db.Model, SerializerMixin):
+
     __tablename__ = 'lawyers'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -87,7 +89,9 @@ class LawyerDetails(db.Model, SerializerMixin):
     cases = db.relationship('Case', back_populates='lawyer')
     reviews = db.relationship('Review', back_populates='lawyer')
 
+
 class Payment(db.Model, SerializerMixin):
+
     __tablename__ = 'payments'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -102,7 +106,9 @@ class Payment(db.Model, SerializerMixin):
     user = db.relationship('User', back_populates='payments')
     subscription = db.relationship('Subscription', back_populates='payments')
 
+
 class Subscription(db.Model, SerializerMixin):
+
     __tablename__ = 'subscriptions'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -115,7 +121,9 @@ class Subscription(db.Model, SerializerMixin):
     user = db.relationship('User', back_populates='subscriptions')
     payments = db.relationship('Payment', back_populates='subscription')
 
+
 class Case(db.Model, SerializerMixin):
+
     __tablename__ = 'cases'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -130,7 +138,9 @@ class Case(db.Model, SerializerMixin):
     lawyer = db.relationship('LawyerDetails', back_populates='cases')
     case_histories = db.relationship('CaseHistory', back_populates='case')
 
+
 class CaseHistory(db.Model, SerializerMixin):
+
     __tablename__ = 'histories'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -141,7 +151,9 @@ class CaseHistory(db.Model, SerializerMixin):
     # Relationships
     case = db.relationship('Case', back_populates='case_histories')
 
+
 class Review(db.Model, SerializerMixin):
+
     __tablename__ = 'reviews'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -154,7 +166,9 @@ class Review(db.Model, SerializerMixin):
     user = db.relationship('User', back_populates='reviews')
     lawyer = db.relationship('LawyerDetails', back_populates='reviews')
 
+
 class Message(db.Model, SerializerMixin):
+
     __tablename__ = 'messages'
 
     id = db.Column(db.Integer, primary_key=True)

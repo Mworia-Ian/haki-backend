@@ -1,5 +1,6 @@
 __pycache__/
 instance/
 migrations/
-Pipfile/
+Pipfile
 Pipfile.lock
+.env
