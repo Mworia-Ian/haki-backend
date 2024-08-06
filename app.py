@@ -14,6 +14,12 @@ from flask_jwt_extended import JWTManager
 from models import db
 from resources.user import SignupResource, LoginResource, LogoutResource
 
+from resources.mpesa import StkPush
+from resources.payment import PaymentResource
+from resources.subscription import SubscriptionResource
+
+
+
 app = Flask(__name__)
 api = Api(app)
 
@@ -48,7 +54,13 @@ api.add_resource(HelloWorld, '/')
 api.add_resource(SignupResource, '/signup')
 api.add_resource(LoginResource, '/login')
 api.add_resource(LogoutResource, '/logout')
+
+api.add_resource(StkPush, '/stk_push')
+api.add_resource(PaymentResource, '/payment/<int:payment_id>')
+api.add_resource(SubscriptionResource, '/subscription/<int:subscription_id>')
+
 # api.add_resource(CaseResource, '/cases', '/cases/<int:id>')
+
 
 if __name__ == '__main__':
     app.run(debug=True)
