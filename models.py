@@ -34,7 +34,7 @@ class User(db.Model, SerializerMixin):
     area_of_residence = db.Column(db.String(100), nullable=False)
     role = db.Column(db.String(20), nullable=False)
 
-    serialize_rules = ('-password',)
+    serialize_rules = ('-password', '-area_of_residence', '-id_no', '-payments.user', '-subscriptions.user', '-lawyer_details.user', '-reviews.user', '-messages_sent.sender', '-messages_received.receiver', '-cases.user')
 
     @validates('email')
     def validate_email(self, key, email):
@@ -85,6 +85,8 @@ class LawyerDetails(db.Model, SerializerMixin):
     rate_per_hour = db.Column(db.Integer)
     qualification_certificate = db.Column(db.LargeBinary)
 
+    serialize_rules = ('-user.lawyer_details', '-cases.lawyer', '-reviews.lawyer')
+
     user = db.relationship('User', back_populates='lawyer_details')
     cases = db.relationship('Case', back_populates='lawyer')
     reviews = db.relationship('Review', back_populates='lawyer')
@@ -101,6 +103,8 @@ class Payment(db.Model, SerializerMixin):
     status = db.Column(db.String(20), nullable=False, default='pending')
     timestamp = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
 
+    serialize_rules = ('-user.payments', '-subscription.payments')
+
     # Relationships
     user = db.relationship('User', back_populates='payments')
     subscription = db.relationship('Subscription', back_populates='payments')
@@ -114,6 +118,8 @@ class Subscription(db.Model, SerializerMixin):
     payment_status = db.Column(db.String(20), nullable=False, default='unpaid')
     start_date = db.Column(db.DateTime)
     end_date = db.Column(db.DateTime)
+
+    serialize_rules = ('-user.subscriptions', '-payments.subscription')
 
     # Relationships
     user = db.relationship('User', back_populates='subscriptions')
@@ -130,6 +136,8 @@ class Case(db.Model, SerializerMixin):
     court_date = db.Column(db.DateTime)
     status = db.Column(db.String(50), default='pending')
 
+    serialize_rules = ('-user.cases', '-lawyer.cases', '-case_histories.case')
+
     # Relationships
     user = db.relationship('User', back_populates='cases')
     lawyer = db.relationship('LawyerDetails', back_populates='cases')
@@ -144,6 +152,8 @@ class CaseHistory(db.Model, SerializerMixin):
     details = db.Column(db.String(1000), nullable=False)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
 
+    serialize_rules = ('-case.case_histories')
+
     # Relationships
     case = db.relationship('Case', back_populates='case_histories')
 
@@ -156,6 +166,8 @@ class Review(db.Model, SerializerMixin):
     lawyer_id = db.Column(db.Integer, db.ForeignKey('lawyers.id'))
     review = db.Column(db.String(1000), nullable=False)
     rating = db.Column(db.Integer, nullable=False)
+
+    serialize_rules = ('-user.reviews', '-lawyer.reviews')
 
     # Relationships
     user = db.relationship('User', back_populates='reviews')
@@ -173,7 +185,8 @@ class Message(db.Model, SerializerMixin):
     sender_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     receiver_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
+    serialize_rules = ('-sender.messages_sent', '-receiver.messages_received')
+
     # Relationships
     sender = db.relationship('User', foreign_keys=[sender_id], back_populates='messages_sent')
     receiver = db.relationship('User', foreign_keys=[receiver_id], back_populates='messages_received')
-
