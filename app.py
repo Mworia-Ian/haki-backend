@@ -16,9 +16,7 @@ from resources.user import SignupResource, LoginResource, LogoutResource
 from resources.mpesa import StkPush
 from resources.payment import PaymentResource
 from resources.subscription import SubscriptionResource
-from resources.case import CaseResource
-from resources.review import ReviewResource
-from resources.message import MessageResource
+
 
 
 app = Flask(__name__)
@@ -60,8 +58,6 @@ api.add_resource(LogoutResource, '/logout')
 api.add_resource(StkPush, '/stk_push')
 api.add_resource(PaymentResource, '/payment/<int:payment_id>')
 api.add_resource(SubscriptionResource, '/subscription/<int:subscription_id>')
-api.add_resource(CaseResource, '/case/<int:case_id>')
-api.add_resource(ReviewResource, '/review/<int:review_id>')
-api.add_resource(MessageResource, '/message/<int:message_id>')
+
 if __name__ == '__main__':
     app.run(debug=True)
