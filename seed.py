@@ -1,86 +1,89 @@
-from app import app
-from datetime import datetime
-from models import db, User, LawyerDetails, Review, Payment, Subscription, Case, CaseHistory, Message, Role
+from datetime import datetime, timedelta
+from models import db, User, LawyerDetails, Payment, Subscription, Case, Review, Message
+from flask_bcrypt import generate_password_hash
 
-with app.app_context():
-    print('Seeding dummy data')
-    User.query.delete()
-    LawyerDetails.query.delete()
-    Review.query.delete()
-    Payment.query.delete()
-    Subscription.query.delete()
-    Case.query.delete()
-    Message.query.delete()
-    Role.query.delete()
-    CaseHistory.query.delete()
-
-    # Users data
-    user1 = User(firstname='Charles', lastname='Biegon', id_no=12345678, phone='0712345678',
-                 email='charles@gmail.com', password='1234', area_of_residence='Nairobi')
+# Sample data
+def seed_data():
+    # Create users
+    user1 = User(
+        firstname="Charles",
+        lastname="Kibet",
+        id_no=12345679,
+        phone="0722222222",
+        email="charlesdoe@example.com",
+        password=generate_password_hash("password123").decode('utf-8'),
+        area_of_residence="Nairobi",
+        role="client"
+    )
     user2 = User(
-        firstname='Jane', lastname='Doe', id_no=000000,
-        phone=1234567890, email='jane@gmail.com',
-        area_of_residence='Kenya', password='1234'
+        firstname="Lema",
+        lastname="Sam",
+        id_no=23456789,
+        phone="0723456788",
+        email="lemasmith@example.com",
+        password=generate_password_hash("password123").decode('utf-8'),
+        area_of_residence="Mombasa",
+        role="lawyer"
     )
 
-    db.session.add(user1)
-    db.session.add(user2)
-    db.session.commit()
-    print("user added successfully")
+    # Create lawyer details
+    lawyer_details = LawyerDetails(
+        user_id=user2.id,
+        years_of_experience=5,
+        specialization="Criminal Law",
+        rate_per_hour=1500,
+        qualification_certificate=None
+    )
 
-    # lawyers data
-    lawyer1 = LawyerDetails(user_id=user1.id,
-                            lawyer_id='LAW123', years_of_experience='5',
-                            specialization='Criminal Law', rate_per_hour=150,
-                            qualification_certificate=None
-                            )
-    db.session.add(lawyer1)
-    db.session.commit()
-    print("lawyer added successfully")
+    # Create subscription
+    subscription1 = Subscription(
+        user_id=user1.id,
+        payment_status="paid",
+        start_date=datetime.utcnow(),
+        end_date=datetime.utcnow() + timedelta(days=30)
+    )
 
-    # Reviews data
-    review1 = Review(user_id=user2.id, lawyer_id=lawyer1.id,
-                     review='Excellent service.')
-    db.session.add(review1)
-    db.session.commit()
-    print("Reviews for lawyer 1 added ")
+    # Create payments
+    payment1 = Payment(
+        user_id=user1.id,
+        subscription_id=subscription1.id,
+        amount=1000,
+        transaction_id="txn_123456",
+        status="completed"
+    )
 
-    # Payments data
-    payment1 = Payment(user_id=user1.id)
-    db.session.add(payment1)
-    db.session.commit()
-    print("payment added")
+    # Create cases
+    case1 = Case(
+        user_id=user1.id,
+        lawyer_id=lawyer_details.id,
+        description="Case description here.",
+        court_date=datetime.utcnow() + timedelta(days=15),
+        status="active"
+    )
 
-    # Subscriptions data
-    subscription1 = Subscription(user_id=user1.id, payment_id=1)
-    db.session.add(subscription1)
-    db.session.commit()
-    print('Subscription added successfully')
+    # Create reviews
+    review1 = Review(
+        user_id=user1.id,
+        lawyer_id=lawyer_details.id,
+        review="Excellent service!",
+        rating=5
+    )
 
-    # Cases data
-    case1 = Case(user_id=user1.id, lawyer_id=lawyer1.id, description='Case 1 description',
-                 court_date=datetime.now(), status='Open')
-    db.session.add(case1)
-    db.session.commit()
-    print('Cases added')
+    # Create messages
+    message1 = Message(
+        user_id=user1.id,
+        message="Hello, I need assistance with my case.",
+        date=datetime.utcnow(),
+        sender_id=user1.id,
+        receiver_id=user2.id
+    )
 
-    # Case history added
-    case_history1 = CaseHistory(
-        case_id=case1.id, details='Case history details.')
-    db.session.add(case_history1)
+    # Add records to the database
+    db.session.add_all([user1, user2, lawyer_details, subscription1, payment1, case1, review1, message1])
     db.session.commit()
-    print('Case history')
 
-    # message data
-    message1 = Message(user_id=user1.id, date=datetime.now(), message='Message details',
-                       sender_id='Charles Biegon', receiver_id='Jane Doe')
-    db.session.add(message1)
-    db.session.commit()
-    print('messages added')
-
-    # Role data
-    role1 = Role(user_id=user1.id, firstname='Charles',
-                 lastname='Biegon', email='charles@gmail.com')
-    db.session.add(role1)
-    db.session.commit()
-    print('Roles created')
+if __name__ == '__main__':
+    from app import app
+    with app.app_context():
+        seed_data()
+        print("Database seeded successfully!")
