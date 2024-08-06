@@ -9,6 +9,7 @@ from flask_jwt_extended import JWTManager
 
 
 
+
 # Import models
 from models import db
 from resources.user import SignupResource, LoginResource, LogoutResource
@@ -43,6 +44,7 @@ class HelloWorld(Resource):
         return {"message": "Hello Haki"}
 
 api.add_resource(HelloWorld, '/')
+# Add resources
 api.add_resource(SignupResource, '/signup')
 api.add_resource(LoginResource, '/login')
 api.add_resource(LogoutResource, '/logout')
