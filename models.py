@@ -83,6 +83,7 @@ class LawyerDetails(db.Model, SerializerMixin):
     years_of_experience = db.Column(db.Integer, nullable=False)
     specialization = db.Column(db.String(100), nullable=False)
     rate_per_hour = db.Column(db.Integer)
+    image = db.Column(db.String(256))
     qualification_certificate = db.Column(db.LargeBinary)
 
     serialize_rules = ('-user.lawyer_details', '-cases.lawyer', '-reviews.lawyer')
