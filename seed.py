@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 from models import db, User, LawyerDetails, Payment, Subscription, Case, Review, Message
-from flask_bcrypt import generate_password_hash
+# from flask_bcrypt import generate_password_hash
 
 # Sample data
 def seed_data():
