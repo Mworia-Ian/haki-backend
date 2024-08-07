@@ -12,4 +12,33 @@ class ReviewResource(Resource):
             return {'message': 'Review not found'}, 404
         
         return jsonify(review.to_dict())
+        @jwt_required()
+    def post(self):
+        # Create a new review
+        data = request.get_json()
+        user_id = data.get('user_id')
+        lawyer_id = data.get('lawyer_id')
+        
+        # Validate user and lawyer existence
+        user = User.query.get(user_id)
+        lawyer = LawyerDetails.query.get(lawyer_id)
+        
+        if not user:
+            return {'message': 'User not found'}, 404
+        
+        if not lawyer:
+            return {'message': 'Lawyer not found'}, 404
+
+        review = Review(
+            user_id=user_id,
+            lawyer_id=lawyer_id,
+            review=data.get('review'),
+            rating=data.get('rating')
+        )
+
+        db.session.add(review)
+        db.session.commit()
+
+        return jsonify(review.to_dict()), 201
+
 
