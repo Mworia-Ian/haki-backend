@@ -41,5 +41,18 @@ class ReviewResource(Resource):
         db.session.commit()
 
         return jsonify(review.to_dict()), 201
-
+    @jwt_required()
+    def delete(self):
+        # Delete a review by ID
+        data = request.get_json()
+        review_id = data.get('review_id')
+        
+        review = Review.query.get(review_id)
+        if not review:
+            return {'message': 'Review not found'}, 404
+        
+        db.session.delete(review)
+        db.session.commit()
+        
+        return {'message': 'Review deleted successfully'}, 200
 
