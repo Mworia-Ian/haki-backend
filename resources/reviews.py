@@ -12,7 +12,8 @@ class ReviewResource(Resource):
             return {'message': 'Review not found'}, 404
         
         return jsonify(review.to_dict())
-        @jwt_required()
+    
+    @jwt_required()
     def post(self):
         # Create a new review
         data = request.get_json()
