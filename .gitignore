@@ -1,6 +1,8 @@
 __pycache__/
 instance/
-migrations/
 Pipfile
 Pipfile.lock
 .env
+
+
+a3a0756bc36c

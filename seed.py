@@ -1,86 +1,125 @@
 from app import app
-from datetime import datetime
-from models import db, User, LawyerDetails, Review, Payment, Subscription, Case, CaseHistory, Message, Role
+from models import db, User, LawyerDetails, Payment, Subscription, Case, CaseHistory, Review, Message
+from datetime import datetime, timedelta
 
-with app.app_context():
-    print('Seeding dummy data')
-    User.query.delete()
-    LawyerDetails.query.delete()
-    Review.query.delete()
-    Payment.query.delete()
-    Subscription.query.delete()
-    Case.query.delete()
-    Message.query.delete()
-    Role.query.delete()
-    CaseHistory.query.delete()
 
-    # Users data
-    user1 = User(firstname='Charles', lastname='Biegon', id_no=12345678, phone='0712345678',
-                 email='charles@gmail.com', password='1234', area_of_residence='Nairobi')
-    user2 = User(
-        firstname='Jane', lastname='Doe', id_no=000000,
-        phone=1234567890, email='jane@gmail.com',
-        area_of_residence='Kenya', password='1234'
-    )
+# Seed data
 
-    db.session.add(user1)
-    db.session.add(user2)
-    db.session.commit()
-    print("user added successfully")
+def seed_data():
+    with app.app_context():
+        # Drop all tables and recreate them
+        db.drop_all()
+        db.create_all()
 
-    # lawyers data
-    lawyer1 = LawyerDetails(user_id=user1.id,
-                            lawyer_id='LAW123', years_of_experience='5',
-                            specialization='Criminal Law', rate_per_hour=150,
-                            qualification_certificate=None
-                            )
-    db.session.add(lawyer1)
-    db.session.commit()
-    print("lawyer added successfully")
+        # Create Users
+        user1 = User(
+            firstname='John',
+            lastname='Doe',
+            id_no=12345678,
+            phone='0701234567',
+            email='john.doe@example.com',
+            password='password123',
+            area_of_residence='Nairobi',
+            role='client'
+        )
 
-    # Reviews data
-    review1 = Review(user_id=user2.id, lawyer_id=lawyer1.id,
-                     review='Excellent service.')
-    db.session.add(review1)
-    db.session.commit()
-    print("Reviews for lawyer 1 added ")
+        user2 = User(
+            firstname='Jane',
+            lastname='Smith',
+            id_no=87654321,
+            phone='0709876543',
+            email='jane.smith@example.com',
+            password='password456',
+            area_of_residence='Mombasa',
+            role='lawyer'
+        )
 
-    # Payments data
-    payment1 = Payment(user_id=user1.id)
-    db.session.add(payment1)
-    db.session.commit()
-    print("payment added")
+        db.session.add(user1)
+        db.session.add(user2)
+        db.session.commit()
 
-    # Subscriptions data
-    subscription1 = Subscription(user_id=user1.id, payment_id=1)
-    db.session.add(subscription1)
-    db.session.commit()
-    print('Subscription added successfully')
+        # Create Lawyer Details
+        lawyer_details1 = LawyerDetails(
+            user_id=user2.id,
+            years_of_experience=10,
+            specialization='Criminal Law',
+            rate_per_hour=150,
+            image='path/to/lawyer_image.jpg',
+            qualification_certificate=b'certificate_data'
+        )
 
-    # Cases data
-    case1 = Case(user_id=user1.id, lawyer_id=lawyer1.id, description='Case 1 description',
-                 court_date=datetime.now(), status='Open')
-    db.session.add(case1)
-    db.session.commit()
-    print('Cases added')
+        db.session.add(lawyer_details1)
+        db.session.commit()
 
-    # Case history added
-    case_history1 = CaseHistory(
-        case_id=case1.id, details='Case history details.')
-    db.session.add(case_history1)
-    db.session.commit()
-    print('Case history')
+        # Create Subscriptions
+        subscription1 = Subscription(
+            user_id=user1.id,
+            payment_status='paid',
+            start_date=datetime.utcnow(),
+            end_date=datetime.utcnow() + timedelta(days=30)
+        )
 
-    # message data
-    message1 = Message(user_id=user1.id, date=datetime.now(), message='Message details',
-                       sender_id='Charles Biegon', receiver_id='Jane Doe')
-    db.session.add(message1)
-    db.session.commit()
-    print('messages added')
+        db.session.add(subscription1)
+        db.session.commit()
 
-    # Role data
-    role1 = Role(user_id=user1.id, firstname='Charles',
-                 lastname='Biegon', email='charles@gmail.com')
-    db.session.add(role1)
-    db.session.commit()
-    print('Roles created')
+        # Create Payments
+        payment1 = Payment(
+            user_id=user1.id,
+            subscription_id=subscription1.id,
+            amount=100.0,
+            transaction_id='txn_123456789',
+            status='completed'
+        )
+
+        db.session.add(payment1)
+        db.session.commit()
+
+        # Create Cases
+        case1 = Case(
+            user_id=user1.id,
+            lawyer_id=lawyer_details1.id,
+            description='Case description example.',
+            court_date=datetime.utcnow() + timedelta(days=15),
+            status='open'
+        )
+
+        db.session.add(case1)
+        db.session.commit()
+
+        # Create Case History
+        case_history1 = CaseHistory(
+            case_id=case1.id,
+            details='Initial case details.',
+            timestamp=datetime.utcnow()
+        )
+
+        db.session.add(case_history1)
+        db.session.commit()
+
+        # Create Reviews
+        review1 = Review(
+            user_id=user1.id,
+            lawyer_id=lawyer_details1.id,
+            review='Great lawyer!',
+            rating=5
+        )
+
+        db.session.add(review1)
+        db.session.commit()
+
+        # Create Messages
+        message1 = Message(
+            user_id=user1.id,
+            message='Hello, I need your help.',
+            date=datetime.utcnow(),
+            sender_id=user1.id,
+            receiver_id=user2.id
+        )
+
+        db.session.add(message1)
+        db.session.commit()
+
+        print("Seed data added successfully!")
+
+if __name__ == '__main__':
+    seed_data()
