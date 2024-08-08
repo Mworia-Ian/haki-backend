@@ -57,7 +57,7 @@ api.add_resource(LogoutResource, '/logout')
 
 api.add_resource(StkPush, '/stk_push')
 api.add_resource(PaymentResource, '/payment/<int:payment_id>')
-api.add_resource(SubscriptionResource, '/subscription/<int:subscription_id>')
+api.add_resource(SubscriptionResource, '/subscription')
 
 # api.add_resource(CaseResource, '/cases', '/cases/<int:id>')
 
