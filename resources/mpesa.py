@@ -1,4 +1,4 @@
-from flask import request, jsonify
+from flask import request, jsonify,make_response
 from flask_restful import Resource
 import base64
 import requests
@@ -26,7 +26,7 @@ def create_token():
     if response.status_code == 200:
         data = response.json()
         token_info['token'] = data['access_token']
-        token_info['expires_at'] = datetime.utcnow() + timedelta(minutes=59)  # Token valid for 60 minutes
+        token_info['expires_at'] = datetime.utcnow() + timedelta(minutes=59)
         return True, None
     else:
         return False, response.text
@@ -53,7 +53,7 @@ class StkPush(Resource):
         if not phone or not amount or not user_id:
             return jsonify({'error': 'Phone number, amount, and user_id are required'}), 400
 
-        phone = phone.lstrip('0')  # Remove the leading 0
+        phone = phone.lstrip('0') 
         short_code = 174379
         passkey = 'bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919'
         url = 'https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest'
@@ -97,9 +97,9 @@ class StkPush(Resource):
                 db.session.add(new_payment)
                 db.session.commit()
                 
-                return jsonify({'message': 'STK Push initiated successfully', 'transaction_id': transaction_id}), 200
+                return make_response(jsonify({'message': 'STK Push initiated successfully', 'transaction_id': transaction_id}), 200)
             except Exception as e:
                 db.session.rollback()
-                return jsonify({'error': f'Failed to save payment to database: {str(e)}'}), 500
+                return make_response(jsonify({'error': f'Failed to save payment to database: {str(e)}'}), 500)
         else:
-            return jsonify({'error': response.text}), response.status_code
+            return make_response(jsonify({'error': response.text}), response.status_code)

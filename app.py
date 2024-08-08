@@ -12,7 +12,7 @@ from flask_jwt_extended import JWTManager
 # Import models
 from models import db
 from resources.user import SignupResource, LoginResource, LogoutResource
-
+from resources.case import CaseResource
 app = Flask(__name__)
 api = Api(app)
 
