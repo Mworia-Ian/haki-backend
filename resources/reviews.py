@@ -55,4 +55,3 @@ class ReviewResource(Resource):
         db.session.commit()
         
         return {'message': 'Review deleted successfully'}, 200
-
