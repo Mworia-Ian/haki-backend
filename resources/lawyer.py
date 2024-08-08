@@ -13,7 +13,7 @@ def allowed_file(filename):
 
 class LawyerDetailsResource(Resource):
     parser = reqparse.RequestParser()
-    parser.add_argument('years_of_experience', required=True,  help='Years of experience')
+    parser.add_argument('years_of_experience', required=True, help='Years of experience')
     parser.add_argument('specialization', required=True, help='Specialization')
     parser.add_argument('rate_per_hour', required=True, help='Rate per hour')
     parser.add_argument('image', required=True, help='Image URL')
@@ -45,14 +45,15 @@ class LawyerDetailsResource(Resource):
             lawyer = LawyerDetails.query.filter_by(id=id).first()
             if lawyer is None:
                 return {'message': 'Lawyer not found'}, 404
-            
-            if 'years_of_experience' in data and data['years_of_experience'] is not None:
+
+            # Update fields if present in the request
+            if 'years_of_experience' in data and data['years_of_experience']:
                 lawyer.years_of_experience = data['years_of_experience']
-            if 'specialization' in data and data['specialization'] is not None:
+            if 'specialization' in data and data['specialization']:
                 lawyer.specialization = data['specialization']
-            if 'rate_per_hour' in data and data['rate_per_hour'] is not None:
+            if 'rate_per_hour' in data and data['rate_per_hour']:
                 lawyer.rate_per_hour = data['rate_per_hour']
-            if 'image' in data and data['image'] is not None:
+            if 'image' in data and data['image']:
                 lawyer.image = data['image']
             
             # Handle file upload for qualification_certificate

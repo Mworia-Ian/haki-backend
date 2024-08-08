@@ -1,4 +1,3 @@
-# 
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import MetaData
 from sqlalchemy.orm import validates
@@ -7,7 +6,6 @@ from flask_bcrypt import check_password_hash, generate_password_hash
 from datetime import datetime
 import re
 
-# Define naming convention for database schema
 # Define naming convention for database schema
 convention = {
     "ix": 'ix_%(column_0_label)s',
@@ -33,8 +31,11 @@ class User(db.Model, SerializerMixin):
     area_of_residence = db.Column(db.String(100), nullable=False)
     role = db.Column(db.String(20), nullable=False)
 
-    serialize_rules = ('-password', '-area_of_residence', '-id_no', '-payments.user', '-subscriptions.user', '-lawyer_details.user', '-reviews.user', '-messages_sent.sender', '-messages_received.receiver', '-cases.user')
-    serialize_rules = ('-password', '-area_of_residence', '-id_no', '-payments.user', '-subscriptions.user', '-lawyer_details.user', '-reviews.user', '-messages_sent.sender', '-messages_received.receiver', '-cases.user')
+    serialize_rules = (
+        '-password', '-area_of_residence', '-id_no',
+        '-payments.user', '-subscriptions.user', '-lawyer_details.user',
+        '-reviews.user', '-messages_sent.sender', '-messages_received.receiver', '-cases.user'
+    )
 
     @validates('email')
     def validate_email(self, key, email):
@@ -45,7 +46,6 @@ class User(db.Model, SerializerMixin):
     @validates('phone')
     def validate_phone(self, key, phone):
         if not re.match(r"^0[0-9]{9}$", phone):
-            raise ValueError("Phone number must be a 10-digit number starting with 0")
             raise ValueError("Phone number must be a 10-digit number starting with 0")
         return phone
 
@@ -62,30 +62,10 @@ class User(db.Model, SerializerMixin):
     payments = db.relationship('Payment', back_populates='user')
     subscriptions = db.relationship('Subscription', back_populates='user')
     lawyer_details = db.relationship('LawyerDetails', back_populates='user', uselist=False)
-    lawyer_details = db.relationship('LawyerDetails', back_populates='user', uselist=False)
     reviews = db.relationship('Review', back_populates='user')
-    messages_sent = db.relationship(
-        'Message',
-        foreign_keys='Message.sender_id',
-        back_populates='sender'
-    )
-    messages_received = db.relationship(
-        'Message',
-        foreign_keys='Message.receiver_id',
-        back_populates='receiver'
-    )
-    messages_sent = db.relationship(
-        'Message',
-        foreign_keys='Message.sender_id',
-        back_populates='sender'
-    )
-    messages_received = db.relationship(
-        'Message',
-        foreign_keys='Message.receiver_id',
-        back_populates='receiver'
-    )
+    messages_sent = db.relationship('Message', foreign_keys='Message.sender_id', back_populates='sender')
+    messages_received = db.relationship('Message', foreign_keys='Message.receiver_id', back_populates='receiver')
     cases = db.relationship('Case', back_populates='user')
-
 
 class LawyerDetails(db.Model, SerializerMixin):
     __tablename__ = 'lawyers'
@@ -104,7 +84,6 @@ class LawyerDetails(db.Model, SerializerMixin):
     cases = db.relationship('Case', back_populates='lawyer')
     reviews = db.relationship('Review', back_populates='lawyer')
 
-
 class Payment(db.Model, SerializerMixin):
     __tablename__ = 'payments'
 
@@ -118,12 +97,9 @@ class Payment(db.Model, SerializerMixin):
 
     serialize_rules = ('-user.payments', '-subscription.payments')
 
-    serialize_rules = ('-user.payments', '-subscription.payments')
-
     # Relationships
     user = db.relationship('User', back_populates='payments')
     subscription = db.relationship('Subscription', back_populates='payments')
-
 
 class Subscription(db.Model, SerializerMixin):
     __tablename__ = 'subscriptions'
@@ -136,12 +112,9 @@ class Subscription(db.Model, SerializerMixin):
 
     serialize_rules = ('-user.subscriptions', '-payments.subscription')
 
-    serialize_rules = ('-user.subscriptions', '-payments.subscription')
-
     # Relationships
     user = db.relationship('User', back_populates='subscriptions')
     payments = db.relationship('Payment', back_populates='subscription')
-
 
 class Case(db.Model, SerializerMixin):
     __tablename__ = 'cases'
@@ -155,13 +128,10 @@ class Case(db.Model, SerializerMixin):
 
     serialize_rules = ('-user.cases', '-lawyer.cases', '-case_histories.case')
 
-  
-
     # Relationships
     user = db.relationship('User', back_populates='cases')
     lawyer = db.relationship('LawyerDetails', back_populates='cases')
     case_histories = db.relationship('CaseHistory', back_populates='case')
-
 
 class CaseHistory(db.Model, SerializerMixin):
     __tablename__ = 'histories'
@@ -177,7 +147,6 @@ class CaseHistory(db.Model, SerializerMixin):
     # Relationships
     case = db.relationship('Case', back_populates='case_histories')
 
-
 class Review(db.Model, SerializerMixin):
     __tablename__ = 'reviews'
 
@@ -189,12 +158,9 @@ class Review(db.Model, SerializerMixin):
 
     serialize_rules = ('-user.reviews', '-lawyer.reviews')
 
-    serialize_rules = ('-user.reviews', '-lawyer.reviews')
-
     # Relationships
     user = db.relationship('User', back_populates='reviews')
     lawyer = db.relationship('LawyerDetails', back_populates='reviews')
-
 
 class Message(db.Model, SerializerMixin):
     __tablename__ = 'messages'
@@ -207,14 +173,7 @@ class Message(db.Model, SerializerMixin):
     receiver_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
     serialize_rules = ('-sender.messages_sent', '-receiver.messages_received')
-    sender_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    receiver_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-
-    serialize_rules = ('-sender.messages_sent', '-receiver.messages_received')
 
     # Relationships
-    sender = db.relationship('User', foreign_keys=[sender_id], back_populates='messages_sent')
-    receiver = db.relationship('User', foreign_keys=[receiver_id], back_populates='messages_received')
-
     sender = db.relationship('User', foreign_keys=[sender_id], back_populates='messages_sent')
     receiver = db.relationship('User', foreign_keys=[receiver_id], back_populates='messages_received')
