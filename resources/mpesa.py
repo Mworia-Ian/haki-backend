@@ -72,7 +72,7 @@ class StkPush(Resource):
             'PartyB': short_code,
             'PhoneNumber': f"254{phone}",
             'CallBackURL': 'https://mydomain.com/path',
-            'AccountReference': 'Mpesa Test',
+            'AccountReference': 'Charles Biegon',
             'TransactionDesc': 'Testing stk push'
         }
 
