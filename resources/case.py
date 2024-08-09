@@ -5,6 +5,8 @@ from models import db, Case
 from sqlalchemy import and_, not_
 from flask_jwt_extended import jwt_required, get_jwt, get_jwt_identity
 
+
+
 class CaseResource(Resource):
     parser = reqparse.RequestParser()
     parser.add_argument('description', required=True, help='Description of the case is required')

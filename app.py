@@ -15,7 +15,7 @@ from models import db
 from resources.user import SignupResource, LoginResource, LogoutResource
 from resources.case import CaseResource
 from resources.history import CaseHistoryResource
-from resources.lawyer import LawyerDetailsResource
+from resources.lawyer import LawyerDetailsResource, LawyerResource
 
 app = Flask(__name__)
 api = Api(app)
@@ -52,6 +52,7 @@ api.add_resource(LogoutResource, '/logout')
 api.add_resource(CaseResource, '/cases', '/cases/<int:id>')
 api.add_resource(LawyerDetailsResource, '/lawyer_details', '/lawyer_details/<int:id>')
 api.add_resource(CaseHistoryResource, '/case_histories', '/case_histories/<int:case_id>')
+api.add_resource(LawyerResource, '/lawyers', '/lawyers/<int:id>')
 
 
 if __name__ == '__main__':

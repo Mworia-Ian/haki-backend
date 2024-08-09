@@ -1,6 +1,7 @@
 from app import app
 from models import db, User, LawyerDetails, Payment, Subscription, Case, CaseHistory, Review, Message
 from datetime import datetime, timedelta
+from flask_bcrypt import generate_password_hash
 
 
 # Seed data
@@ -18,7 +19,7 @@ def seed_data():
             id_no=12345678,
             phone='0701234567',
             email='john.doe@example.com',
-            password='password123',
+            password=generate_password_hash('password123').decode('utf-8'),
             area_of_residence='Nairobi',
             role='client'
         )
@@ -29,7 +30,7 @@ def seed_data():
             id_no=87654321,
             phone='0709876543',
             email='jane.smith@example.com',
-            password='password456',
+            password=generate_password_hash('12345').decode('utf-8'),
             area_of_residence='Mombasa',
             role='lawyer'
         )
