@@ -15,9 +15,10 @@ flask-jwt-extended = "*"
 sqlalchemy-serializer = "*"
 python-dotenv = "*"
 faker = "*"
+flask-requests = "*"
+requests = "*"
 
 [dev-packages]
 
 [requires]
 python_version = "3.10"
-
