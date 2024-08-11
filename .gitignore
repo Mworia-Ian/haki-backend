@@ -3,3 +3,4 @@ instance/
 Pipfile
 Pipfile.lock
 .env
+migrations
