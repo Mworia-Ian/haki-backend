@@ -118,8 +118,7 @@ class Subscription(db.Model, SerializerMixin):
     payment_status = db.Column(db.String(20), nullable=False, default='unpaid')
     start_date = db.Column(db.DateTime)
     end_date = db.Column(db.DateTime)
-    active = db.Column(db.Boolean, default=False)  # Added field
-
+    active = db.Column(db.Boolean, default=False)
     serialize_rules = ('-user.subscriptions', '-payments.subscription')
 
     # Relationships
@@ -152,7 +151,7 @@ class CaseHistory(db.Model, SerializerMixin):
     case_id = db.Column(db.Integer, db.ForeignKey('cases.id'))
     details = db.Column(db.String(1000), nullable=False)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
-
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     serialize_rules = ('-case.case_histories')
 
     # Relationships

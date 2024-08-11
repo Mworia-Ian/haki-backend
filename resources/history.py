@@ -8,7 +8,7 @@ class CaseHistoryResource(Resource):
     # Create a new instance of reqparse
     parser = reqparse.RequestParser()
     parser.add_argument('details', required=True, help="Details are required")
-    parser.add_argument('timestamp', required=True, help="Timestamp is required in ISO 8601 format")
+    parser.add_argument('timestamp', required=True, help="Timestamp is required")
     parser.add_argument('case_id', required=True, help="Case ID is required")
 
     @jwt_required()
@@ -36,7 +36,7 @@ class CaseHistoryResource(Resource):
         try:
             timestamp = datetime.fromisoformat(data['timestamp'])
         except ValueError:
-            return {"message": "Invalid timestamp format. Use ISO 8601 format."}, 400
+            return {"message": "Invalid timestamp format."}, 400
 
         # Create a new case history record
         new_case_history = CaseHistory(

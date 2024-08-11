@@ -1,8 +1,8 @@
-"""Migration
+"""Initial migration
 
-Revision ID: c6a07dc2f541
+Revision ID: 091664468665
 Revises: 
-Create Date: 2024-08-09 14:37:14.652820
+Create Date: 2024-08-11 10:15:09.011438
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'c6a07dc2f541'
+revision = '091664468665'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -106,7 +106,9 @@ def upgrade():
     sa.Column('case_id', sa.Integer(), nullable=True),
     sa.Column('details', sa.String(length=1000), nullable=False),
     sa.Column('timestamp', sa.DateTime(), nullable=False),
+    sa.Column('user_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['case_id'], ['cases.id'], name=op.f('fk_histories_case_id_cases')),
+    sa.ForeignKeyConstraint(['user_id'], ['users.id'], name=op.f('fk_histories_user_id_users')),
     sa.PrimaryKeyConstraint('id', name=op.f('pk_histories'))
     )
     # ### end Alembic commands ###
@@ -123,4 +125,3 @@ def downgrade():
     op.drop_table('lawyers')
     op.drop_table('users')
     # ### end Alembic commands ###
-
