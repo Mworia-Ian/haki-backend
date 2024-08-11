@@ -1,10 +1,11 @@
-from flask import request, jsonify,make_response
+
+from flask import request, jsonify, make_response
 from flask_restful import Resource
 import base64
 import requests
 from datetime import datetime, timedelta
-from models import db, Payment
-from flask_jwt_extended import jwt_required
+from models import db, Payment, Subscription
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 # Global variable to store the token and its expiration
 token_info = {
@@ -48,10 +49,10 @@ class StkPush(Resource):
         request_data = request.get_json()
         phone = request_data.get('phone')
         amount = request_data.get('amount')
-        user_id = request_data.get('user_id')
+        user_id = get_jwt_identity()
 
-        if not phone or not amount or not user_id:
-            return jsonify({'error': 'Phone number, amount, and user_id are required'}), 400
+        if not phone or not amount:
+            return jsonify({'error': 'Phone number and amount are required'}), 400
 
         phone = phone.lstrip('0') 
         short_code = 174379
@@ -96,10 +97,23 @@ class StkPush(Resource):
                 )
                 db.session.add(new_payment)
                 db.session.commit()
+
+                # Create a new subscription after successful payment
+                new_subscription = Subscription(
+                    user_id=user_id,
+                    payment_status='Paid',
+                    start_date=datetime.now(),
+                    end_date=datetime.now() + timedelta(days=30)  # Assuming a 30-day subscription
+                )
+                db.session.add(new_subscription)
+
+                # Update the payment status to 'completed'
+                new_payment.status = 'completed'
+                db.session.commit()
                 
-                return make_response(jsonify({'message': 'STK Push initiated successfully', 'transaction_id': transaction_id}), 200)
+                return make_response(jsonify({'message': 'Payment completed successfully', 'transaction_id': transaction_id, 'subscription_id': new_subscription.id}), 200)
             except Exception as e:
                 db.session.rollback()
-                return make_response(jsonify({'error': f'Failed to save payment to database: {str(e)}'}), 500)
+                return make_response(jsonify({'error': f'Failed to save payment or subscription to database: {str(e)}'}), 500)
         else:
             return make_response(jsonify({'error': response.text}), response.status_code)

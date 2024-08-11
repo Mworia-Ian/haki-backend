@@ -64,7 +64,7 @@ class LoginResource(Resource):
             is_password_match = user.check_password(data['password'])
 
             if is_password_match:
-                user_dict = user.to_dict()
+                user_dict = user.to_dict(only=('id','firstname','role', 'email',))
                 additional_claims = { "role": user_dict['role'] }
                 access_token = create_access_token(identity=user_dict['id'],
                                                    additional_claims=additional_claims)
