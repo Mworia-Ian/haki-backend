@@ -2,7 +2,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import MetaData
 from sqlalchemy.orm import validates
 from sqlalchemy_serializer import SerializerMixin
-from flask_bcrypt import check_password_hash, generate_password_hash
+from flask_bcrypt import check_password_hash
 from datetime import datetime
 import re
 
@@ -21,7 +21,6 @@ db = SQLAlchemy(metadata=metadata)
 # Models
 
 class User(db.Model, SerializerMixin):
-
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -176,7 +175,6 @@ class Review(db.Model, SerializerMixin):
 
 
 class Message(db.Model, SerializerMixin):
-
     __tablename__ = 'messages'
 
     id = db.Column(db.Integer, primary_key=True)
