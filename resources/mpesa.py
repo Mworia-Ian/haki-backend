@@ -1,4 +1,5 @@
-
+import os
+from dotenv import load_dotenv
 from flask import request, jsonify, make_response
 from flask_restful import Resource
 import base64
@@ -12,10 +13,10 @@ token_info = {
     'token': None,
     'expires_at': None
 }
-
+load_dotenv()
 def create_token():
-    secret = '8JltK44JOAaiGrGxk3cNADBF6AFpNEebmJvF9Wf7jvrWS7ZsDM9QBgza3mfFfTON'
-    consumer = '4YWMPAsbwOM3iSvbAJHEn0udpIeLkqKtLdKSYFNkuP7g4NeA'
+    consumer = os.getenv('CONSUMER_KEY')
+    secret = os.getenv('SECRET_KEY')
     auth = base64.b64encode(f"{consumer}:{secret}".encode()).decode()
 
     headers = {
