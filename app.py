@@ -23,8 +23,8 @@ from resources.payment import PaymentResource
 app = Flask(__name__)
 api = Api(app)
 
-# Configure the app
 
+# Configure the app
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL")
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False

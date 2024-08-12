@@ -123,6 +123,9 @@ def seed_data():
         print("Seed data added successfully!")
 
 if __name__ == '__main__':
-    seed_data()
+
 
     
+
+    seed_data()
+
