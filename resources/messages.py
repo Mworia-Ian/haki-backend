@@ -8,7 +8,7 @@ from flask import request
 from models import Message, db
 # Initialize Firestore
 
-cred = credentials.Certificate('path/to/your/firebase/credentials.json')
+cred = credentials.Certificate('')
 firebase_admin.initialize_app(cred)
 db_firestore = firestore.client()
 
