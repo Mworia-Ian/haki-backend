@@ -52,6 +52,14 @@ class MessageResource(Resource):
 
         return [{'id': msg.id, 'message': msg.message, 'date': msg.date} for msg in messages], 200
 
-    @jwt_required()
     def delete(self, message_id):
-        pass
+        current_user_id = get_jwt_identity()
+        message = Message.query.get(message_id)
+
+        if message is None or (message.sender_id != current_user_id and message.receiver_id != current_user_id):
+            return {'message': 'Message not found or not authorized to delete'}, 404
+
+        db.session.delete(message)
+        db.session.commit()
+
+        return {'message': 'Message deleted successfully'}, 200
