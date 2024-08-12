@@ -31,7 +31,7 @@ class SignupResource(Resource):
         role = data['role'].lower()
         if role not in ['lawyer', 'client']:
             return {'message': 'Invalid role. Must be either lawyer or client', 'status': 'fail'}, 422
-
+          
         # Check if the email already exists
         email = User.query.filter_by(email=data['email']).first()
         if email:
@@ -74,6 +74,7 @@ class SignupResource(Resource):
             # Log the exception
             import logging
             logging.error(f"Error occurred: {str(e)}")
+
             return {'message': 'Something went wrong', 'status': 'fail', 'error': str(e)}, 500
         
         return {
@@ -101,6 +102,7 @@ class LoginResource(Resource):
 
             if is_password_match:
                 user_dict = user.to_dict(only=('id','firstname','role', 'email',))
+
                 additional_claims = { "role": user_dict['role'] }
                 access_token = create_access_token(identity=user_dict['id'],
                                                    additional_claims=additional_claims)

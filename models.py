@@ -2,7 +2,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import MetaData
 from sqlalchemy.orm import validates
 from sqlalchemy_serializer import SerializerMixin
-from flask_bcrypt import check_password_hash
+from flask_bcrypt import check_password_hash, generate_password_hash
 from datetime import datetime
 import re
 
@@ -83,7 +83,11 @@ class LawyerDetails(db.Model, SerializerMixin):
     specialization = db.Column(db.String(100), nullable=False)
     rate_per_hour = db.Column(db.Integer)
     image = db.Column(db.String(256))
+
     qualification_certificate = db.Column(db.String(256))
+
+    serialize_rules = ('-user.lawyer_details', '-cases.lawyer', '-reviews.lawyer')
+
 
     serialize_rules = ('-user.lawyer_details', '-cases.lawyer', '-reviews.lawyer')
 
@@ -121,6 +125,8 @@ class Subscription(db.Model, SerializerMixin):
     active = db.Column(db.Boolean, default=False)
     serialize_rules = ('-user.subscriptions', '-payments.subscription')
 
+    serialize_rules = ('-user.subscriptions', '-payments.subscription')
+
     # Relationships
     user = db.relationship('User', back_populates='subscriptions')
     payments = db.relationship('Payment', back_populates='subscription')
@@ -152,6 +158,8 @@ class CaseHistory(db.Model, SerializerMixin):
     details = db.Column(db.String(1000), nullable=False)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    serialize_rules = ('-case.case_histories')
+
     serialize_rules = ('-case.case_histories')
 
     # Relationships
