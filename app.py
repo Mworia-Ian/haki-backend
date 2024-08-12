@@ -18,7 +18,7 @@ from resources.mpesa import StkPush
 from resources.payment import PaymentResource
 from resources.subscription import SubscriptionResource
 from resources.reviews import ReviewResource
-from resources.messages import MessagesResource
+from resources.messages import MessageResource
 
 app = Flask(__name__)
 api = Api(app)
@@ -62,7 +62,7 @@ api.add_resource(SubscriptionResource, '/subscription/<int:subscription_id>')
 # api.add_resource(CaseResource, '/cases', '/cases/<int:id>')
 api.add_resource(ReviewResource, '/reviews', '/reviews/<int:review_id>')
 
-api.add_resource(MessagesResource, '/messages', '/messages/<int:id>')
+api.add_resource(MessageResource, '/messages', '/messages/<int:id>')
 
 if __name__ == '__main__':
     app.run(debug=True)
