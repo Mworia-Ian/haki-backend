@@ -1,10 +1,14 @@
-from flask import request, jsonify
+import os
+from dotenv import load_dotenv
+from flask import request, jsonify, make_response
+
 from flask_restful import Resource
 import base64
 import requests
 from datetime import datetime, timedelta
-from models import db, Payment
-from flask_jwt_extended import jwt_required
+
+from models import db, Payment, Subscription
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 # Global variable to store the token and its expiration
 token_info = {
@@ -12,9 +16,11 @@ token_info = {
     'expires_at': None
 }
 
+load_dotenv()
 def create_token():
-    secret = '8JltK44JOAaiGrGxk3cNADBF6AFpNEebmJvF9Wf7jvrWS7ZsDM9QBgza3mfFfTON'
-    consumer = '4YWMPAsbwOM3iSvbAJHEn0udpIeLkqKtLdKSYFNkuP7g4NeA'
+    consumer = os.getenv('CONSUMER_KEY')
+    secret = os.getenv('SECRET_KEY')
+
     auth = base64.b64encode(f"{consumer}:{secret}".encode()).decode()
 
     headers = {
@@ -26,7 +32,9 @@ def create_token():
     if response.status_code == 200:
         data = response.json()
         token_info['token'] = data['access_token']
-        token_info['expires_at'] = datetime.utcnow() + timedelta(minutes=59)  # Token valid for 60 minutes
+
+        token_info['expires_at'] = datetime.utcnow() + timedelta(minutes=59)
+
         return True, None
     else:
         return False, response.text
@@ -48,12 +56,14 @@ class StkPush(Resource):
         request_data = request.get_json()
         phone = request_data.get('phone')
         amount = request_data.get('amount')
-        user_id = request_data.get('user_id')
 
-        if not phone or not amount or not user_id:
-            return jsonify({'error': 'Phone number, amount, and user_id are required'}), 400
+        user_id = get_jwt_identity()
 
-        phone = phone.lstrip('0')  # Remove the leading 0
+        if not phone or not amount:
+            return jsonify({'error': 'Phone number and amount are required'}), 400
+
+        phone = phone.lstrip('0') 
+
         short_code = 174379
         passkey = 'bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919'
         url = 'https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest'
@@ -72,7 +82,9 @@ class StkPush(Resource):
             'PartyB': short_code,
             'PhoneNumber': f"254{phone}",
             'CallBackURL': 'https://mydomain.com/path',
-            'AccountReference': 'Mpesa Test',
+          
+            'AccountReference': 'Charles Biegon',
+
             'TransactionDesc': 'Testing stk push'
         }
 
@@ -96,10 +108,24 @@ class StkPush(Resource):
                 )
                 db.session.add(new_payment)
                 db.session.commit()
+
+
+                # Create a new subscription after successful payment
+                new_subscription = Subscription(
+                    user_id=user_id,
+                    payment_status='Paid',
+                    start_date=datetime.now(),
+                    end_date=datetime.now() + timedelta(days=30)  # Assuming a 30-day subscription
+                )
+                db.session.add(new_subscription)
+
+                # Update the payment status to 'completed'
+                new_payment.status = 'completed'
+                db.session.commit()
                 
-                return jsonify({'message': 'STK Push initiated successfully', 'transaction_id': transaction_id}), 200
+                return make_response(jsonify({'message': 'Payment completed successfully', 'transaction_id': transaction_id, 'subscription_id': new_subscription.id}), 200)
             except Exception as e:
                 db.session.rollback()
-                return jsonify({'error': f'Failed to save payment to database: {str(e)}'}), 500
+                return make_response(jsonify({'error': f'Failed to save payment or subscription to database: {str(e)}'}), 500)
         else:
-            return jsonify({'error': response.text}), response.status_code
+            return make_response(jsonify({'error': response.text}), response.status_code)

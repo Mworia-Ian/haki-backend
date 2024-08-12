@@ -22,3 +22,4 @@ class PaymentResource(Resource):
         db.session.commit()
         
         return {'message': 'Payment deleted successfully'}, 200
+

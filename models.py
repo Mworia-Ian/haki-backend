@@ -21,7 +21,6 @@ db = SQLAlchemy(metadata=metadata)
 # Models
 
 class User(db.Model, SerializerMixin):
-
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -84,7 +83,11 @@ class LawyerDetails(db.Model, SerializerMixin):
     specialization = db.Column(db.String(100), nullable=False)
     rate_per_hour = db.Column(db.Integer)
     image = db.Column(db.String(256))
-    qualification_certificate = db.Column(db.LargeBinary)
+
+    qualification_certificate = db.Column(db.String(256))
+
+    serialize_rules = ('-user.lawyer_details', '-cases.lawyer', '-reviews.lawyer')
+
 
     serialize_rules = ('-user.lawyer_details', '-cases.lawyer', '-reviews.lawyer')
 
@@ -119,6 +122,8 @@ class Subscription(db.Model, SerializerMixin):
     payment_status = db.Column(db.String(20), nullable=False, default='unpaid')
     start_date = db.Column(db.DateTime)
     end_date = db.Column(db.DateTime)
+    active = db.Column(db.Boolean, default=False)
+    serialize_rules = ('-user.subscriptions', '-payments.subscription')
 
     serialize_rules = ('-user.subscriptions', '-payments.subscription')
 
@@ -152,6 +157,8 @@ class CaseHistory(db.Model, SerializerMixin):
     case_id = db.Column(db.Integer, db.ForeignKey('cases.id'))
     details = db.Column(db.String(1000), nullable=False)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    serialize_rules = ('-case.case_histories')
 
     serialize_rules = ('-case.case_histories')
 
@@ -176,7 +183,6 @@ class Review(db.Model, SerializerMixin):
 
 
 class Message(db.Model, SerializerMixin):
-
     __tablename__ = 'messages'
 
     id = db.Column(db.Integer, primary_key=True)
