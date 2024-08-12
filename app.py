@@ -21,7 +21,8 @@ from resources.lawyer import LawyerDetailsResource, LawyerResource
 from resources.mpesa import StkPush
 from resources.subscription import SubscriptionResource
 from resources.payment import PaymentResource
-# from resources.reviews import ReviewResource
+from resources.messages import MessageResource
+from resources.reviews import ReviewResource
 
 app = Flask(__name__)
 api = Api(app)
