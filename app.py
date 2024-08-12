@@ -20,7 +20,7 @@ from resources.history import CaseHistoryResource
 from resources.lawyer import LawyerDetailsResource, LawyerResource
 from resources.mpesa import StkPush
 from resources.subscription import SubscriptionResource
-from resources.payment import PaymentResource
+from resources.payment import PaymentStatusResource
 from resources.messages import MessageResource
 from resources.reviews import ReviewResource
 
@@ -93,8 +93,7 @@ api.add_resource(LawyerResource, '/lawyers', '/lawyers/<int:id>')
 
 api.add_resource(StkPush, '/stk_push')
 api.add_resource(SubscriptionResource, '/subscription')
-api.add_resource(PaymentResource, '/payment', endpoint='paymentresource')
-
+api.add_resource(PaymentStatusResource, '/payment_status/<string:transaction_id>')
 api.add_resource(ProtectedResource, '/protected')  
 
 if __name__ == '__main__':
