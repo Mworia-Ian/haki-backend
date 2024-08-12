@@ -4,3 +4,4 @@ migrations/
 Pipfile
 Pipfile.lock
 .env
+assets/
