@@ -1,5 +1,7 @@
 __pycache__/
 instance/
+migrations/
 Pipfile
 Pipfile.lock
 .env
+assets/

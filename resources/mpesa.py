@@ -1,9 +1,12 @@
-
+import os
+from dotenv import load_dotenv
 from flask import request, jsonify, make_response
+
 from flask_restful import Resource
 import base64
 import requests
 from datetime import datetime, timedelta
+
 from models import db, Payment, Subscription
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
@@ -13,9 +16,11 @@ token_info = {
     'expires_at': None
 }
 
+load_dotenv()
 def create_token():
-    secret = '8JltK44JOAaiGrGxk3cNADBF6AFpNEebmJvF9Wf7jvrWS7ZsDM9QBgza3mfFfTON'
-    consumer = '4YWMPAsbwOM3iSvbAJHEn0udpIeLkqKtLdKSYFNkuP7g4NeA'
+    consumer = os.getenv('CONSUMER_KEY')
+    secret = os.getenv('SECRET_KEY')
+
     auth = base64.b64encode(f"{consumer}:{secret}".encode()).decode()
 
     headers = {
@@ -27,7 +32,9 @@ def create_token():
     if response.status_code == 200:
         data = response.json()
         token_info['token'] = data['access_token']
+
         token_info['expires_at'] = datetime.utcnow() + timedelta(minutes=59)
+
         return True, None
     else:
         return False, response.text
@@ -49,12 +56,14 @@ class StkPush(Resource):
         request_data = request.get_json()
         phone = request_data.get('phone')
         amount = request_data.get('amount')
+
         user_id = get_jwt_identity()
 
         if not phone or not amount:
             return jsonify({'error': 'Phone number and amount are required'}), 400
 
         phone = phone.lstrip('0') 
+
         short_code = 174379
         passkey = 'bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919'
         url = 'https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest'
@@ -73,7 +82,9 @@ class StkPush(Resource):
             'PartyB': short_code,
             'PhoneNumber': f"254{phone}",
             'CallBackURL': 'https://mydomain.com/path',
+          
             'AccountReference': 'Charles Biegon',
+
             'TransactionDesc': 'Testing stk push'
         }
 
@@ -97,6 +108,7 @@ class StkPush(Resource):
                 )
                 db.session.add(new_payment)
                 db.session.commit()
+
 
                 # Create a new subscription after successful payment
                 new_subscription = Subscription(
