@@ -45,7 +45,12 @@ class MessageResource(Resource):
         return {'message': 'Message sent successfully'}, 201
     @jwt_required()
     def get(self):
-        pass
+        current_user_id = get_jwt_identity()
+        messages = Message.query.filter(
+            (Message.sender_id == current_user_id) | (Message.receiver_id == current_user_id)
+        ).all()
+
+        return [{'id': msg.id, 'message': msg.message, 'date': msg.date} for msg in messages], 200
 
     @jwt_required()
     def delete(self, message_id):
