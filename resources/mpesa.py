@@ -82,39 +82,40 @@ class StkPush(Resource):
             'Authorization': f'Bearer {token}'
         }
 
-        response = requests.post(url, json=data, headers=headers)
+        try:
+            response = requests.post(url, json=data, headers=headers)
+            response.raise_for_status()  # Raise an error for bad responses
 
-        if response.status_code == 200:
             response_data = response.json()
             transaction_id = response_data.get('CheckoutRequestID')
-            
+
             # Save payment to database
             try:
-                new_payment = Payment(
-                    user_id=user_id,
-                    amount=amount,
-                    transaction_id=transaction_id,
-                    status='pending'
-                )
-                db.session.add(new_payment)
-                db.session.commit()
-
-                # Create a new subscription after successful payment
                 new_subscription = Subscription(
                     user_id=user_id,
                     payment_status='Paid',
                     start_date=datetime.now(),
-                    end_date=datetime.now() + timedelta(days=30)  # Assuming a 30-day subscription
+                    end_date=datetime.now() + timedelta(days=30) 
                 )
                 db.session.add(new_subscription)
+                db.session.commit()  # Commit to get the subscription ID
 
-                # Update the payment status to 'completed'
-                new_payment.status = 'completed'
+                new_payment = Payment(
+                    user_id=user_id,
+                    amount=amount,
+                    transaction_id=transaction_id,
+                    status='completed',  # Set status to completed
+                    subscription_id=new_subscription.id  # Set subscription ID
+                )
+                db.session.add(new_payment)
                 db.session.commit()
                 
                 return make_response(jsonify({'message': 'Payment completed successfully', 'transaction_id': transaction_id, 'subscription_id': new_subscription.id}), 200)
             except Exception as e:
                 db.session.rollback()
                 return make_response(jsonify({'error': f'Failed to save payment or subscription to database: {str(e)}'}), 500)
-        else:
-            return make_response(jsonify({'error': response.text}), response.status_code)
+        
+        except requests.RequestException as e:
+            return make_response(jsonify({'error': f'Error with STK Push request: {str(e)}'}), 500)
+
+   
