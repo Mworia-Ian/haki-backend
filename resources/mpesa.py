@@ -74,7 +74,7 @@ class StkPush(Resource):
             'PartyB': short_code,
             'PhoneNumber': f"254{phone}",
             'CallBackURL': 'https://mydomain.com/path',
-            'AccountReference': 'Charles Biegon',
+            'AccountReference': 'Haki App',
             'TransactionDesc': 'Testing stk push'
         }
 
