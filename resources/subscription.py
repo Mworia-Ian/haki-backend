@@ -7,19 +7,22 @@ from datetime import datetime, timedelta
 class SubscriptionResource(Resource):
     @jwt_required()
     def get(self):
+        print("Subscription GET request received")
         user_id = get_jwt_identity()  # Retrieve the current user's ID from the token
         subscription = Subscription.query.filter_by(user_id=user_id, active=True).first()
         
         if subscription:
             return {
-                "subscription_id": subscription.id,
-                "status": subscription.payment_status,
-                "start_date": subscription.start_date,
-                "end_date": subscription.end_date,
-                "amount": subscription.amount
+                  'id': subscription.id,
+                'user_id': subscription.user_id,
+                'payment_status': subscription.payment_status,
+                'start_date': subscription.start_date.isoformat(),
+                'end_date': subscription.end_date.isoformat(),
+                'active': subscription.active
             }, 200
         else:
-            return {"message": "No active subscription found."}, 404
+            # Return a message instead of a 404 error
+            return {'message': 'No active subscription found.'}, 200
 
     @jwt_required()
     def post(self):
