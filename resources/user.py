@@ -109,7 +109,7 @@ class LoginResource(Resource):
 
                 return {"message": "Login successful",
                         "status": "success",
-                        "user": user_dict,
+                        "user": {**user_dict, "role" : user.role},
                         "access_token": access_token}
             else:
                 return {"message": "Invalid email/password", "status": "fail"}, 403
