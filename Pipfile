@@ -15,8 +15,6 @@ flask-jwt-extended = "*"
 sqlalchemy-serializer = "*"
 python-dotenv = "*"
 faker = "*"
-flask-requests = "*"
-requests = "*"
 firebase-admin = "*"
 
 [dev-packages]
