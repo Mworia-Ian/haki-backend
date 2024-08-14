@@ -16,13 +16,15 @@ class CaseResource(Resource):
 
     @jwt_required()
     def get(self, id=None):
+        
         jwt = get_jwt()
         user_id = get_jwt_identity()
 
         if jwt['role'] == 'lawyer':
+            
             if id is None:
                 cases = Case.query.filter_by(lawyer_id=user_id).all()
-                results = [case.to_dict() for case in cases]
+                results = [case.to_dict(only=("description", "court_date", "status",)) for case in cases]
                 return results
             else:
                 case = Case.query.filter_by(id=id, lawyer_id=user_id).first()
@@ -52,7 +54,7 @@ class CaseResource(Resource):
 
                 db.session.add(new_case)
                 db.session.commit()
-                response_dict = new_case.to_dict()
+                response_dict = new_case.to_dict(only=("description", "court_date", "status",))
                 return make_response(response_dict, 201)
             except ValueError as ve:
                 return {"message": f"Invalid date format: {str(ve)}", "status": "fail"}, 400

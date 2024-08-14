@@ -11,7 +11,7 @@ class ReviewResource(Resource):
         if not review:
             return {'message': 'Review not found'}, 404
         
-        return jsonify(review.to_dict())
+        return jsonify(review.to_dict(only=("review",)))
     
     @jwt_required()
     def post(self):
@@ -40,7 +40,7 @@ class ReviewResource(Resource):
         db.session.add(review)
         db.session.commit()
 
-        return jsonify(review.to_dict()), 201
+        return jsonify(review.to_dict(only=("review",))), 201
     @jwt_required()
     def delete(self):
         # Delete a review by ID
