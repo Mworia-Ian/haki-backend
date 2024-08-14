@@ -6,6 +6,7 @@ from sqlalchemy.exc import IntegrityError
 import firebase_admin
 from firebase_admin import firestore, credentials
 import logging
+from datetime import datetime
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -40,13 +41,14 @@ class MessageResource(Resource):
             user_id=current_user_id,
             message=message_text,
             sender_id=current_user_id,
-            receiver_id=receiver_id
+            receiver_id=receiver_id,
+            date=datetime.utcnow()  # Use current time for date
         )
 
         try:
             self.save_message_to_db(new_message)
             self.save_message_to_firestore(current_user_id, receiver_id, message_text, new_message.date)
-        except IntegrityError:
+        except IntegrityError as e:
             db.session.rollback()
             logger.error(f"Database error: {e}")
             return {'message': 'Database error occurred'}, 500
@@ -64,7 +66,7 @@ class MessageResource(Resource):
             (Message.sender_id == current_user_id) | (Message.receiver_id == current_user_id)
         ).all()
 
-        return [{'id': msg.id, 'message': msg.message, 'date': msg.date} for msg in messages], 200
+        return [{'id': msg.id, 'message': msg.message, 'date': msg.date.isoformat()} for msg in messages], 200
 
     @jwt_required()
     def delete(self, message_id):
@@ -101,10 +103,11 @@ class MessageResource(Resource):
             'sender_id': sender_id,
             'receiver_id': receiver_id,
             'message': message_text,
-            'date': date
+            'date': date.isoformat()  # Convert datetime to ISO format string for Firestore
         }
         try:
             db_firestore.collection('messages').add(message_data)
         except Exception as e:
             logger.error(f"Firestore error: {e}")
-            # Handle this case depending on your needs
+            # Optionally, handle this case depending on your needs
+            # For example, you might want to return a specific error response here
