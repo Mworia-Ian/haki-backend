@@ -174,7 +174,7 @@ class Review(db.Model, SerializerMixin):
     review = db.Column(db.String(1000), nullable=False)
     rating = db.Column(db.Integer, nullable=False)
 
-    serialize_rules = ('-user.reviews', '-lawyer.reviews',)
+    serialize_rules = ('-user.reviews', '-lawyer.reviews', )
 
     # Relationships
     user = db.relationship('User', back_populates='reviews')
