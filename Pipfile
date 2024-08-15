@@ -16,6 +16,7 @@ sqlalchemy-serializer = "*"
 python-dotenv = "*"
 faker = "*"
 firebase-admin = "*"
+redis = "*"
 
 [dev-packages]
 

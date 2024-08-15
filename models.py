@@ -183,17 +183,20 @@ class Review(db.Model, SerializerMixin):
 
 
 class Message(db.Model, SerializerMixin):
+    
     __tablename__ = 'messages'
 
-    id = db.Column(db.Integer, primary_key=True)
+    id =db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     message = db.Column(db.String(1000), nullable=False)
     date = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     sender_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     receiver_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    reply_to = db.Column(db.Integer, db.ForeignKey('messages.id'))  # Add this line
 
     serialize_rules = ('-sender.messages_sent', '-receiver.messages_received')
 
     # Relationships
     sender = db.relationship('User', foreign_keys=[sender_id], back_populates='messages_sent')
     receiver = db.relationship('User', foreign_keys=[receiver_id], back_populates='messages_received')
+    replied_message = db.relationship('Message', remote_side=[id], backref='replies')
