@@ -1,5 +1,6 @@
 from flask import request, jsonify
 from flask_restful import Resource, Api
+from flask_restful import Resource, Api
 from flask_jwt_extended import jwt_required
 from models import db, Review, User, LawyerDetails
 
@@ -40,6 +41,8 @@ class ReviewResource(Resource):
 
         db.session.add(review)
         db.session.commit()
+
+        return review.to_dict(only=("review", "rating", "id",)), 201
 
         return review.to_dict(only=("review", "rating", "id",)), 201
 
