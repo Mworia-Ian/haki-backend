@@ -1,7 +1,7 @@
 from flask_restful import Resource, reqparse
 from flask import request, make_response
 from datetime import datetime
-from models import db, Case
+from models import db, Case, User
 from sqlalchemy import and_, not_
 from flask_jwt_extended import jwt_required, get_jwt, get_jwt_identity
 
@@ -24,7 +24,7 @@ class CaseResource(Resource):
             
             if id is None:
                 cases = Case.query.filter_by(lawyer_id=user_id).all()
-                results = [case.to_dict(only=("description", "court_date", "status","user.firstname",)) for case in cases]
+                results = [case.to_dict(only=("description", "court_date", "status","user.firstname", "user.lastname",)) for case in cases]
                 return results
             else:
                 case = Case.query.filter_by(id=id, lawyer_id=user_id).first()
@@ -54,7 +54,7 @@ class CaseResource(Resource):
 
                 db.session.add(new_case)
                 db.session.commit()
-                response_dict = new_case.to_dict(only=("description", "court_date", "status",))
+                response_dict = new_case.to_dict(only=("description", "court_date", "status", "user_id", "lawyer_id",))
                 return make_response(response_dict, 201)
             except ValueError as ve:
                 return {"message": f"Invalid date format: {str(ve)}", "status": "fail"}, 400

@@ -1,5 +1,6 @@
 from flask import request, jsonify
 from flask_restful import Resource, Api
+from flask_restful import Resource, Api
 from flask_jwt_extended import jwt_required
 from models import db, Review, User, LawyerDetails
 
@@ -8,14 +9,11 @@ class ReviewResource(Resource):
     def get(self, review_id=None):
         if review_id:
             # Retrieve a single review by ID
-            review = Review.query.get(review_id)
-            if not review:
-                return {'message': 'Review not found'}, 404
-            return jsonify(review.to_dict(only=("review", "rating", "id",)))
+            reviews = Review.query.filter_by(lawyer_id = review_id).all()
+            if not reviews:
+                return {'message': 'Review not found', 'status': 'fail'}, 404
+            return jsonify([review.to_dict(only=("review", "rating", "id", "user.firstname", "user.lastname")) for review in reviews])
         
-        # Retrieve all reviews
-        reviews = Review.query.all()
-        return jsonify([review.to_dict(only=("review", "rating", "id",)) for review in reviews])
     
     @jwt_required()
     def post(self):
@@ -26,7 +24,7 @@ class ReviewResource(Resource):
         
         # Validate user and lawyer existence
         user = User.query.get(user_id)
-        lawyer = LawyerDetails.query.get(lawyer_id)
+        lawyer = LawyerDetails.query.filter_by(user_id=lawyer_id).first()
         
         if not user:
             return {'message': 'User not found'}, 404
@@ -45,6 +43,8 @@ class ReviewResource(Resource):
         db.session.commit()
 
         return review.to_dict(only=("review", "rating", "id",)), 201
+
+        
 
     @jwt_required()
     def delete(self):
