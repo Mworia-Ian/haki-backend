@@ -17,6 +17,7 @@ python-dotenv = "*"
 faker = "*"
 firebase-admin = "*"
 redis = "*"
+gunicorn = "*"
 
 [dev-packages]
 

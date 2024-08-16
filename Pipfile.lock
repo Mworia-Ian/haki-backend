@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "bf638a6713b64070c08608d243a8d96f5e11298037c3e8797ef34ce79edc4b10"
+            "sha256": "a2ee58eb6dec05c05278ffd3cbba1aa21190f45724e4d3b3b71241feb57f33f7"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -396,11 +396,11 @@
         },
         "google-api-python-client": {
             "hashes": [
-                "sha256:0bb973adccbe66a3d0a70abe4e49b3f2f004d849416bfec38d22b75649d389d8",
-                "sha256:aeb4bb99e9fdd241473da5ff35464a0658fea0db76fe89c0f8c77ecfc3813404"
+                "sha256:0f225b1f45d5a6f8c2a400f48729f5d6da9a81138e81e0478d61fdd8edf6563a",
+                "sha256:43c05322b91791204465291b3852718fae38d4f84b411d8be847c4f86882652a"
             ],
             "markers": "python_version >= '3.7'",
-            "version": "==2.140.0"
+            "version": "==2.141.0"
         },
         "google-auth": {
             "hashes": [
@@ -592,7 +592,7 @@
                 "sha256:fd096eb7ffef17c456cfa587523c5f92321ae02427ff955bebe9e3c63bc9f0da",
                 "sha256:fe754d231288e1e64323cfad462fcee8f0288654c10bdf4f603a39ed923bef33"
             ],
-            "markers": "platform_machine == 'aarch64' or (platform_machine == 'ppc64le' or (platform_machine == 'x86_64' or (platform_machine == 'amd64' or (platform_machine == 'AMD64' or (platform_machine == 'win32' or platform_machine == 'WIN32')))))",
+            "markers": "python_version < '3.13' and platform_machine == 'aarch64' or (platform_machine == 'ppc64le' or (platform_machine == 'x86_64' or (platform_machine == 'amd64' or (platform_machine == 'AMD64' or (platform_machine == 'win32' or platform_machine == 'WIN32')))))",
             "version": "==3.0.3"
         },
         "grpcio": {
@@ -652,6 +652,15 @@
                 "sha256:1803968c4f14d81b4b156f6f2b54e6959bac4f40b0a6ca2bd4c169978438b9dc"
             ],
             "version": "==1.65.4"
+        },
+        "gunicorn": {
+            "hashes": [
+                "sha256:ec400d38950de4dfd418cff8328b2c8faed0edb0d517d3394e457c317908ca4d",
+                "sha256:f014447a0101dc57e294f6c18ca6b40227a4c90e9bdb586042628030cba004ec"
+            ],
+            "index": "pypi",
+            "markers": "python_version >= '3.7'",
+            "version": "==23.0.0"
         },
         "httplib2": {
             "hashes": [
@@ -820,6 +829,14 @@
             ],
             "markers": "python_version >= '3.8'",
             "version": "==1.0.8"
+        },
+        "packaging": {
+            "hashes": [
+                "sha256:026ed72c8ed3fcce5bf8950572258698927fd1dbda10a5e981cdf0ac37f4f002",
+                "sha256:5b8f2217dbdbd2f7f384c41c628544e6d52f2d0f53c6d0c3ea61aa5d1d7ff124"
+            ],
+            "markers": "python_version >= '3.8'",
+            "version": "==24.1"
         },
         "proto-plus": {
             "hashes": [
