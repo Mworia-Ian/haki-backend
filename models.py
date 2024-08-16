@@ -137,7 +137,7 @@ class Case(db.Model, SerializerMixin):
 
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    lawyer_id = db.Column(db.Integer, db.ForeignKey('lawyers.id'))
+    lawyer_id = db.Column(db.Integer, db.ForeignKey('lawyers.user_id'))
     description = db.Column(db.String(500), nullable=False)
     court_date = db.Column(db.DateTime)
     status = db.Column(db.String(50), default='pending')
@@ -171,7 +171,7 @@ class Review(db.Model, SerializerMixin):
 
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    lawyer_id = db.Column(db.Integer, db.ForeignKey('lawyers.id'))
+    lawyer_id = db.Column(db.Integer, db.ForeignKey('lawyers.user_id'))
     review = db.Column(db.String(1000), nullable=False)
     rating = db.Column(db.Integer, nullable=False)
 
