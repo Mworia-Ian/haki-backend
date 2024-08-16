@@ -24,7 +24,7 @@ class CaseResource(Resource):
             
             if id is None:
                 cases = Case.query.filter_by(lawyer_id=user_id).all()
-                results = [case.to_dict(only=("description", "court_date", "status",)) for case in cases]
+                results = [case.to_dict(only=("description", "court_date", "status","user.firstname",)) for case in cases]
                 return results
             else:
                 case = Case.query.filter_by(id=id, lawyer_id=user_id).first()
