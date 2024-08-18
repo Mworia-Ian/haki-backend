@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "0acc52f67459c7e06c1596dc43708fa1412c1e026c4928c99444bbbbc28a2ab5"
+            "sha256": "a2ee58eb6dec05c05278ffd3cbba1aa21190f45724e4d3b3b71241feb57f33f7"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -36,8 +36,7 @@
                 "sha256:4640d96be84d82d02ed59ea2b7105a0f7b33abe8703703cd0ab0bf87c427522f",
                 "sha256:7405140ff1230c310e51dc27b3145b9092d659ce68ff733fb0cefe3ee42be028"
             ],
-            "index": "pypi",
-            "markers": "python_version >= '3.7'",
+            "markers": "python_full_version < '3.11.3'",
             "version": "==4.0.3"
         },
         "bcrypt": {
@@ -601,7 +600,7 @@
                 "sha256:fd096eb7ffef17c456cfa587523c5f92321ae02427ff955bebe9e3c63bc9f0da",
                 "sha256:fe754d231288e1e64323cfad462fcee8f0288654c10bdf4f603a39ed923bef33"
             ],
-            "markers": "platform_machine == 'aarch64' or (platform_machine == 'ppc64le' or (platform_machine == 'x86_64' or (platform_machine == 'amd64' or (platform_machine == 'AMD64' or (platform_machine == 'win32' or platform_machine == 'WIN32')))))",
+            "markers": "python_version < '3.13' and platform_machine == 'aarch64' or (platform_machine == 'ppc64le' or (platform_machine == 'x86_64' or (platform_machine == 'amd64' or (platform_machine == 'AMD64' or (platform_machine == 'win32' or platform_machine == 'WIN32')))))",
             "version": "==3.0.3"
         },
         "grpcio": {
