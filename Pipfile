@@ -18,6 +18,7 @@ faker = "*"
 firebase-admin = "*"
 redis = "*"
 gunicorn = "*"
+async-timeout = "*"
 
 [dev-packages]
 

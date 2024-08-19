@@ -1,6 +1,5 @@
 from flask import request, jsonify
 from flask_restful import Resource, Api
-from flask_restful import Resource, Api
 from flask_jwt_extended import jwt_required
 from models import db, Review, User, LawyerDetails
 
@@ -14,8 +13,6 @@ class ReviewResource(Resource):
                 return {'message': 'Review not found', 'status': 'fail'}, 404
             return jsonify([review.to_dict(only=("review", "rating", "id", "user.firstname", "user.lastname")) for review in reviews])
         
-        
-    
     @jwt_required()
     def post(self):
         # Create a new review
