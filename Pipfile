@@ -18,6 +18,9 @@ faker = "*"
 firebase-admin = "*"
 redis = "*"
 gunicorn = "*"
+pyotp = "*"
+flask-mail = "*"
+qrcode = "*"
 
 [dev-packages]
 
