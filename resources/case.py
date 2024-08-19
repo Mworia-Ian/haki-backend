@@ -12,7 +12,9 @@ class CaseResource(Resource):
     parser.add_argument('description', required=True, help='Description of the case is required')
     parser.add_argument('court_date', required=True, help='Court date is required')
     parser.add_argument('status',  required=True, help='Status of the case is required')
-    parser.add_argument('user_id', required=True, help='User ID is required')
+    parser.add_argument('firstname', type=str, required=True, help="Firstname cannot be blank.")
+    parser.add_argument('lastname', type=str, required=True, help="Lastname cannot be blank.")
+    
 
     @jwt_required()
     def get(self, id=None):
@@ -43,19 +45,25 @@ class CaseResource(Resource):
             data = CaseResource.parser.parse_args()
             try:
                 court_date = datetime.fromisoformat(data['court_date'].replace('Z', '+00:00'))  # Adjust format as needed
-
+                firstname=data['firstname']
+                lastname= data['lastname']
+                user = User.query.filter_by(firstname=firstname, lastname=lastname, role="client").first()
+                
+                if not user:
+                    return {'message': 'User not found'}, 404
+                
                 new_case = Case(
                     description=data['description'],
                     court_date=court_date,
                     status=data['status'],
-                    user_id=data['user_id'],
+                    user_id=user.id,
                     lawyer_id=user_id
                 )
-
+     
                 db.session.add(new_case)
                 db.session.commit()
-                response_dict = new_case.to_dict(only=("description", "court_date", "status", "user_id", "lawyer_id",))
-                return make_response(response_dict, 201)
+                return {"message": "Case Added Successfuly",
+                                    "status": "success"}
             except ValueError as ve:
                 return {"message": f"Invalid date format: {str(ve)}", "status": "fail"}, 400
             except Exception as e:
