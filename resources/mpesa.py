@@ -13,7 +13,9 @@ token_info = {
     'token': None,
     'expires_at': None
 }
+
 load_dotenv()
+
 def create_token():
     consumer = os.getenv('CONSUMER_KEY')
     secret = os.getenv('SECRET_KEY')
@@ -49,13 +51,13 @@ class StkPush(Resource):
 
         request_data = request.get_json()
         phone = request_data.get('phone')
-        amount = request_data.get('amount')
         user_id = get_jwt_identity()
 
-        if not phone or not amount:
-            return jsonify({'error': 'Phone number and amount are required'}), 400
+        if not phone:
+            return jsonify({'error': 'Phone number is required'}), 400
 
         phone = phone.lstrip('0') 
+        amount = 150 
         short_code = 174379
         passkey = 'bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919'
         url = 'https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest'
