@@ -42,7 +42,7 @@ class CaseResource(Resource):
         if jwt['role'] == 'lawyer':
             data = CaseResource.parser.parse_args()
             try:
-                court_date = datetime.strptime(data['court_date'], '%Y-%m-%d %H:%M:%S')  # Adjust format as needed
+                court_date = datetime.fromisoformat(data['court_date'].replace('Z', '+00:00'))  # Adjust format as needed
 
                 new_case = Case(
                     description=data['description'],
